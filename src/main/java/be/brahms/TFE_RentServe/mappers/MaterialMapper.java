@@ -1,8 +1,11 @@
 package be.brahms.TFE_RentServe.mappers;
 
+import be.brahms.TFE_RentServe.models.dtos.material.MaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.Material;
+import be.brahms.TFE_RentServe.models.forms.material.MaterialCreateForm;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -30,6 +33,35 @@ public interface MaterialMapper {
      */
     List<MaterialDTO> toListDto(List<Material> materials);
 
+    /**
+     * Converts a Material entity to MaterialByIdDto
+     * It takes the  category name from Material
+     * and puts it into the field nameCategory in MaterialByIdDto
+     *
+     * @param material The material object to convert
+     * @return a MaterialDto object data from Material
+     */
+    @Mapping(source = "category.nameCategory", target = "nameCategory")
+    MaterialByIdDTO toDtoById(Material material);
+
+    /**
+     * Convert Material to MaterialDto
+     *
+     * @param material the material entity
+     * @return the material Dto
+     */
+    MaterialDTO toDto(Material material);
+
 
     // Form to Entity
+
+    /**
+     * Convert CreateMaterialForm to a material entity.
+     * Used when create a material
+     *
+     * @param form the material form
+     * @return the material entity
+     */
+    @Mapping(target = "category", ignore = true)
+    Material fromCreateMaterialForm(MaterialCreateForm form);
 }
