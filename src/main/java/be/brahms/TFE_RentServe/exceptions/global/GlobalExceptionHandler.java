@@ -10,6 +10,9 @@ import be.brahms.TFE_RentServe.exceptions.favor.FavorAlreadyExistingException;
 import be.brahms.TFE_RentServe.exceptions.favor.FavorException;
 import be.brahms.TFE_RentServe.exceptions.favor.FavorNotEmptyException;
 import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
+import be.brahms.TFE_RentServe.exceptions.material.MaterialAlreadyExistingException;
+import be.brahms.TFE_RentServe.exceptions.material.MaterialException;
+import be.brahms.TFE_RentServe.exceptions.material.MaterialNotEmptyException;
 import be.brahms.TFE_RentServe.exceptions.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -401,6 +404,63 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
+
+    // Material
+
+    /**
+     * Handles errors specific to material operations.
+     *
+     * @param except the MaterialException containing the error message
+     * @return a response with the error message and HTTP 400 status
+     */
+    @ExceptionHandler(MaterialException.class)
+    public ResponseEntity<ApiError> handleMaterialException(MaterialException except) {
+        ApiError apiError = ApiError.of(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                except.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles MaterialNotEmptyException and sends a 400 BAD REQUEST error.
+     * <p>
+     * This method is called automatically when the Material is empty.
+     * It creates an ApiError and sends it to the frontend.
+     *
+     * @param except The exception that was thrown (MaterialNotEmptyException).
+     * @return A response with an apiError and HTTP status 400 (BAD REQUEST).
+     */
+    @ExceptionHandler(MaterialNotEmptyException.class)
+    public ResponseEntity<ApiError> handleMaterialNotEmptyException(MaterialNotEmptyException except) {
+        ApiError apiError = ApiError.of(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                except.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles MaterialAlreadyExistingException and sends a 302 FOUND error.
+     * <p>
+     * This method is called automatically when the material already exists.
+     * It creates an ApiError and sends it to the frontend.
+     *
+     * @param except The exception that was thrown (MaterialAlreadyExistingException).
+     * @return A response with an apiError and HTTP status 302 (FOUND).
+     */
+    @ExceptionHandler(MaterialAlreadyExistingException.class)
+    public ResponseEntity<ApiError> handleFavorMaterialAlreadyExistingException(MaterialAlreadyExistingException except) {
+        ApiError apiError = ApiError.of(
+                HttpStatus.FOUND.value(),
+                HttpStatus.FOUND.getReasonPhrase(),
+                except.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.FOUND);
+    }
+
 
     // Database
 
