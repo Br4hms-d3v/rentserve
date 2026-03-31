@@ -5,6 +5,7 @@ import be.brahms.TFE_RentServe.hateoas.material.MaterialByIdAssembler;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
 import be.brahms.TFE_RentServe.models.forms.material.MaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.material.MaterialUpdateFormDTO;
 import be.brahms.TFE_RentServe.services.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
@@ -81,6 +82,13 @@ public class MaterialController {
     @PostMapping("new")
     public ResponseEntity<EntityModel<MaterialDTO>> createMaterial(@RequestBody @Valid MaterialCreateForm form) {
         MaterialDTO material = materialService.createMaterial(form);
+        EntityModel<MaterialDTO> modelMaterial = materialAssembler.toModel(material);
+        return ResponseEntity.ok(modelMaterial);
+    }
+
+    @PutMapping("edit/{id}")
+    public ResponseEntity<EntityModel<MaterialDTO>> updateMaterial(@PathVariable Long id, @RequestBody @Valid MaterialUpdateFormDTO form) {
+        MaterialDTO material = materialService.updateMaterial(id, form);
         EntityModel<MaterialDTO> modelMaterial = materialAssembler.toModel(material);
         return ResponseEntity.ok(modelMaterial);
     }

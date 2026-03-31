@@ -11,6 +11,7 @@ import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.Category;
 import be.brahms.TFE_RentServe.models.entities.Material;
 import be.brahms.TFE_RentServe.models.forms.material.MaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.material.MaterialUpdateFormDTO;
 import be.brahms.TFE_RentServe.repositories.CategoryRepository;
 import be.brahms.TFE_RentServe.repositories.MaterialRepository;
 import be.brahms.TFE_RentServe.services.MaterialService;
@@ -118,19 +119,19 @@ public class MaterialServiceImpl implements MaterialService {
         Category categoryExist = categoryRepository.findCategoryByNameCategory(form.category());
         Boolean materialExist = materialRepository.existsMaterialByNameMaterial(material.getNameMaterial());
 
-        if(form.category().isEmpty() || form.category().isBlank()) {
+        if (form.category().isEmpty() || form.category().isBlank()) {
             throw new CategoryNotEmptyException();
         }
 
-        if( categoryExist == null ) {
+        if (categoryExist == null) {
             throw new CategoryNotExistingException();
         }
 
-        if(materialExist){
+        if (materialExist) {
             throw new MaterialAlreadyExistingException();
         }
 
-        if(form.nameMaterial().isEmpty() || form.nameMaterial().isBlank()) {
+        if (form.nameMaterial().isEmpty() || form.nameMaterial().isBlank()) {
             throw new MaterialNotEmptyException();
         }
 
@@ -143,5 +144,43 @@ public class MaterialServiceImpl implements MaterialService {
         return materialMapper.toDto(material);
     }
 
+    /**
+     * Update the material
+     *
+     * @param id   the identifier of material
+     * @param form the form to edit the material
+     * @return a material updated
+     */
+    @Override
+    public MaterialDTO updateMaterial(Long id, MaterialUpdateFormDTO form) {
+        Material materialId = materialRepository.findById(id).orElseThrow();
+        Category categoryExist = categoryRepository.findCategoryByNameCategory(form.category());
+
+        if (categoryExist == null) {
+            throw new CategoryNotExistingException();
+        }
+
+//        if (materialId.getNameMaterial().equals(form.nameMaterial())) {
+//            throw new MaterialAlreadyExistingException();
+//        }
+
+        if (categoryExist.getNameCategory().isEmpty() || categoryExist.getNameCategory().isBlank()) {
+            throw new CategoryNotEmptyException();
+        }
+
+        if (form.nameMaterial().isEmpty() || form.nameMaterial().isBlank()) {
+            throw new MaterialNotEmptyException();
+        }
+
+        materialId.setNameMaterial(form.nameMaterial());
+        materialId.setAvailable(form.isAvailable());
+        materialId.setCategory(categoryExist);
+
+        materialMapper.fromUpdateMaterialForm(form, materialId);
+
+        materialRepository.save(materialId);
+
+        return materialMapper.toDto(materialId);
+    }
 
 }

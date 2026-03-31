@@ -12,7 +12,7 @@ package be.brahms.TFE_RentServe.models.dtos.material;
 public record MaterialByIdDTO(
         Long id,
         String nameMaterial,
-        boolean isAvailable,
-        String nameCategory
-) {
+        String nameCategory,
+        boolean isAvailable
+        ) {
 }

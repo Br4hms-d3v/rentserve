@@ -39,7 +39,8 @@ public class MaterialAssembler implements RepresentationModelAssembler<MaterialD
         return EntityModel.of(material,
                 linkTo(methodOn(MaterialController.class).findAllMaterials()).withRel("List of materials"),
                 linkTo(methodOn(MaterialController.class).findMaterialById(material.id())).withRel("Get material by ID"),
-                linkTo(methodOn(MaterialController.class).createMaterial(null)).withRel("Create a new material")
+                linkTo(methodOn(MaterialController.class).createMaterial(null)).withRel("Create a new material"),
+                linkTo(methodOn(MaterialController.class).updateMaterial(material.id(), null)).withRel("Edit material")
         );
     }
 

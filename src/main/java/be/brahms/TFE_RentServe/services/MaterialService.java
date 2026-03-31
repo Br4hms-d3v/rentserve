@@ -3,6 +3,7 @@ package be.brahms.TFE_RentServe.services;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
 import be.brahms.TFE_RentServe.models.forms.material.MaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.material.MaterialUpdateFormDTO;
 
 import java.util.List;
 
@@ -42,4 +43,13 @@ public interface MaterialService {
      * @return the saved material
      */
     MaterialDTO createMaterial(MaterialCreateForm form);
+
+    /**
+     * This method edit the material
+     *
+     * @param id   the identifier of material
+     * @param form the form to edit the material
+     * @return the updated material
+     */
+    MaterialDTO updateMaterial(Long id, MaterialUpdateFormDTO form);
 }

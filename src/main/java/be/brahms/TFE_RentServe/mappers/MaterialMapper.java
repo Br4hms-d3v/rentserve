@@ -4,8 +4,10 @@ import be.brahms.TFE_RentServe.models.dtos.material.MaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.Material;
 import be.brahms.TFE_RentServe.models.forms.material.MaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.material.MaterialUpdateFormDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -42,6 +44,7 @@ public interface MaterialMapper {
      * @return a MaterialDto object data from Material
      */
     @Mapping(source = "category.nameCategory", target = "nameCategory")
+    @Mapping(source = "available", target = "isAvailable")
     MaterialByIdDTO toDtoById(Material material);
 
     /**
@@ -64,4 +67,14 @@ public interface MaterialMapper {
      */
     @Mapping(target = "category", ignore = true)
     Material fromCreateMaterialForm(MaterialCreateForm form);
+
+    /**
+     * Update an existing Material with data from a updateMaterialForm
+     * Used when update a material
+     *
+     * @param form     the material form
+     * @param material the existing material
+     */
+    @Mapping(target = "category", ignore = true)
+    void fromUpdateMaterialForm(MaterialUpdateFormDTO form, @MappingTarget Material material);
 }
