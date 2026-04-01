@@ -9,28 +9,27 @@ import org.mapstruct.ReportingPolicy;
 /**
  * Mapper responsible for authentication-related conversions.
  *
- * <p>This mapper handles transformations between user domain objects
- * and authentication-related DTOs.</p>
+ * <p>This mapper handles transformations between user domain objects and authentication-related
+ * DTOs.
  *
  * @author Brahim K
- *
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AuthMapper {
-    /**
-     * Create a UserTokenDTO from a User and a token value.
-     *
-     * @param user  the user data
-     * @param token the token value
-     * @return a UserTokenDTO containing the user information and token
-     */
-    UserTokenDTO toTokenDTO(User user, String token);
+  /**
+   * Create a UserTokenDTO from a User and a token value.
+   *
+   * @param user the user data
+   * @param token the token value
+   * @return a UserTokenDTO containing the user information and token
+   */
+  UserTokenDTO toTokenDTO(User user, String token);
 
-    /**
-     * Create a User from a UserForm.
-     *
-     * @param form the user form
-     * @return a new User
-     */
-    User fromUserForm(UserForm form);
+  /**
+   * Create a User from a UserForm.
+   *
+   * @param form the user form
+   * @return a new User
+   */
+  User fromUserForm(UserForm form);
 }

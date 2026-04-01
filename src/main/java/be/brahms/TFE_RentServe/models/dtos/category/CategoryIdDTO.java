@@ -5,15 +5,9 @@ import java.util.Date;
 /**
  * CategoryIdDTO is a data transfer object for category with more details information
  *
- * @param id           the identifier of category
+ * @param id the identifier of category
  * @param nameCategory the name of category
- * @param createdAt    the date when the category was created
- * @param updatedAt    the date when the category was modified
+ * @param createdAt the date when the category was created
+ * @param updatedAt the date when the category was modified
  */
-public record CategoryIdDTO(
-        Long id,
-        String nameCategory,
-        Date createdAt,
-        Date updatedAt
-) {
-}
+public record CategoryIdDTO(Long id, String nameCategory, Date createdAt, Date updatedAt) {}

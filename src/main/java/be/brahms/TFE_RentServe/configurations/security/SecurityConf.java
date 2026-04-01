@@ -14,82 +14,100 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * This class configures security for the application.
- * It sets which URLs need login and which roles can access them.
- * It also adds JWT filter to check tokens in requests.
+ * This class configures security for the application. It sets which URLs need login and which roles
+ * can access them. It also adds JWT filter to check tokens in requests.
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConf {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private JwtFilter jwtFilter;
+  @Autowired private JwtFilter jwtFilter;
 
-    /**
-     * Constructor security configuration by default
-     */
-    public SecurityConf() {
+  /** Constructor security configuration by default */
+  public SecurityConf() {}
 
-    }
+  /**
+   * Configures the security rules for HTTP requests.
+   *
+   * @param http the security object to set rules on
+   * @return the configured security filter chain
+   * @throws Exception if configuration fails
+   */
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    return http.cors(Customizer.withDefaults())
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            auth ->
+                auth
+                    // Spring actuator
+                    .requestMatchers("/actuator/**")
+                    .hasRole("ADMIN")
+                    // Authentification
+                    .requestMatchers("/api/auth/**")
+                    .permitAll()
+                    // Users
+                    .requestMatchers("/api/user/list")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/user/list/{role}")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/user/**")
+                    .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                    // Categories
+                    .requestMatchers("/api/category/delete/{id}")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/category/edit/{id}")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/category/new")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/category/**")
+                    .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                    // Favor
+                    .requestMatchers("/api/favor/delete/{id}")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/favor/new")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/favor/edit")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/favor/**")
+                    .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                    // Material
+                    .requestMatchers("/api/material/delete/{id}")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/material/new")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/material/edit/{id}")
+                    .hasAnyRole("MODERATOR", "ADMIN")
+                    .requestMatchers("/api/material/**")
+                    .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                    .anyRequest()
+                    .permitAll())
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .build();
+  }
 
-    /**
-     * Configures the security rules for HTTP requests.
-     *
-     * @param http the security object to set rules on
-     * @return the configured security filter chain
-     * @throws Exception if configuration fails
-     */
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        // Spring actuator
-                        .requestMatchers("/actuator/**").hasRole("ADMIN")
-                        // Authentification
-                        .requestMatchers("/api/auth/**").permitAll()
-                        // Users
-                        .requestMatchers("/api/user/list").hasRole("ADMIN")
-                        .requestMatchers("/api/user/list/{role}").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
-                        // Categories
-                        .requestMatchers("/api/category/delete/{id}").hasRole("ADMIN")
-                        .requestMatchers("/api/category/edit/{id}").hasAnyRole("MODERATOR", "ADMIN")
-                        .requestMatchers("/api/category/new").hasAnyRole("MODERATOR", "ADMIN")
-                        .requestMatchers("/api/category/**").hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
-                        // Favor
-                        .requestMatchers("/api/favor/delete/{id}").hasRole("ADMIN")
-                        .requestMatchers("/api/favor/new").hasAnyRole("MODERATOR", "ADMIN")
-                        .requestMatchers("/api/favor/edit").hasAnyRole("MODERATOR", "ADMIN")
-                        .requestMatchers("/api/favor/**").hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
-                        .anyRequest().permitAll()
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+  /**
+   * Creates a password encoder using BCrypt.
+   *
+   * @return a BCryptPasswordEncoder object
+   */
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    /**
-     * Creates a password encoder using BCrypt.
-     *
-     * @return a BCryptPasswordEncoder object
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * Provides the AuthenticationManager for login authentication.
-     *
-     * @param authenticationConfiguration the configuration to get AuthenticationManager from
-     * @return the AuthenticationManager object
-     * @throws Exception if getting manager fails
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+  /**
+   * Provides the AuthenticationManager for login authentication.
+   *
+   * @param authenticationConfiguration the configuration to get AuthenticationManager from
+   * @return the AuthenticationManager object
+   * @throws Exception if getting manager fails
+   */
+  @Bean
+  public AuthenticationManager authenticationManager(
+      AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
 }

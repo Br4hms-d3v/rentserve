@@ -7,8 +7,4 @@ import jakarta.validation.constraints.NotBlank;
  *
  * @param nameCategory the name of category
  */
-public record CategoryForm(
-        @NotBlank
-        String nameCategory
-) {
-}
+public record CategoryForm(@NotBlank String nameCategory) {}

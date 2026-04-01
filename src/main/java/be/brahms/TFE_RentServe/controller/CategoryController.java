@@ -6,22 +6,18 @@ import be.brahms.TFE_RentServe.models.dtos.category.CategoryIdDTO;
 import be.brahms.TFE_RentServe.models.forms.category.CategoryForm;
 import be.brahms.TFE_RentServe.services.CategoryService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
- * This controller manages Category
- * It has a method to display a list of categories
- * It has a method to display details about the category
- * It has a method to create a new category
- * It has a method to edit a category
- * It has a method to search by name of category
- * It has a method to delete a category
+ * This controller manages Category It has a method to display a list of categories It has a method
+ * to display details about the category It has a method to create a new category It has a method to
+ * edit a category It has a method to search by name of category It has a method to delete a
+ * category
  *
  * @author Brahim K
  */
@@ -29,97 +25,100 @@ import java.util.List;
 @RequestMapping("/api/category")
 public class CategoryController {
 
-    private final CategoryService categoryService;
-    private final CategoryAssembler categoryAssembler;
+  private final CategoryService categoryService;
+  private final CategoryAssembler categoryAssembler;
 
-    /**
-     * This constructor is used to inject the necessary services for handling category-related request.
-     *
-     * @param categoryService   the service used for category management
-     * @param categoryAssembler the assembler used to convert Category object to into CategoryDto models
-     */
-    public CategoryController(CategoryService categoryService, CategoryAssembler categoryAssembler) {
-        this.categoryService = categoryService;
-        this.categoryAssembler = categoryAssembler;
-    }
+  /**
+   * This constructor is used to inject the necessary services for handling category-related
+   * request.
+   *
+   * @param categoryService the service used for category management
+   * @param categoryAssembler the assembler used to convert Category object to into CategoryDto
+   *     models
+   */
+  public CategoryController(CategoryService categoryService, CategoryAssembler categoryAssembler) {
+    this.categoryService = categoryService;
+    this.categoryAssembler = categoryAssembler;
+  }
 
-    /**
-     * Get a list of all categories
-     *
-     * @return a list of all categories
-     */
-    @GetMapping("list")
-    @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
-    public ResponseEntity<CollectionModel<CategoryDTO>> getAllCategories() {
-        List<CategoryDTO> categories = categoryService.findAllCategories();
-        return ResponseEntity.ok().body(CollectionModel.of(categories));
-    }
+  /**
+   * Get a list of all categories
+   *
+   * @return a list of all categories
+   */
+  @GetMapping("list")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
+  public ResponseEntity<CollectionModel<CategoryDTO>> getAllCategories() {
+    List<CategoryDTO> categories = categoryService.findAllCategories();
+    return ResponseEntity.ok().body(CollectionModel.of(categories));
+  }
 
-    /**
-     * Get category's data by his ID
-     *
-     * @param id identifier unique
-     * @return data's about the category
-     */
-    @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
-    public ResponseEntity<EntityModel<CategoryIdDTO>> getCategory(@PathVariable long id) {
-        CategoryIdDTO categoryId = categoryService.findCategoryById(id);
-        return ResponseEntity.ok(categoryAssembler.toIdModel(categoryId));
-    }
+  /**
+   * Get category's data by his ID
+   *
+   * @param id identifier unique
+   * @return data's about the category
+   */
+  @GetMapping("{id}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
+  public ResponseEntity<EntityModel<CategoryIdDTO>> getCategory(@PathVariable long id) {
+    CategoryIdDTO categoryId = categoryService.findCategoryById(id);
+    return ResponseEntity.ok(categoryAssembler.toIdModel(categoryId));
+  }
 
-    /**
-     * Create a new category
-     *
-     * @param form the form to create a new category
-     * @return a new category
-     */
-    @PostMapping("{new}")
-    @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
-    public ResponseEntity<EntityModel<CategoryDTO>> createCategory(@RequestBody @Valid CategoryForm form) {
-        CategoryDTO category = categoryService.createCategory(form);
-        return ResponseEntity.ok().body(categoryAssembler.toModel(category));
-    }
+  /**
+   * Create a new category
+   *
+   * @param form the form to create a new category
+   * @return a new category
+   */
+  @PostMapping("{new}")
+  @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
+  public ResponseEntity<EntityModel<CategoryDTO>> createCategory(
+      @RequestBody @Valid CategoryForm form) {
+    CategoryDTO category = categoryService.createCategory(form);
+    return ResponseEntity.ok().body(categoryAssembler.toModel(category));
+  }
 
-    /**
-     * This method update some data's about the category
-     * Check if the name of category already exist
-     *
-     * @param id   the identifier of category
-     * @param form the form with new data to update
-     * @return a new response with data updated
-     */
-    @PutMapping("edit/{id}")
-    @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
-    public ResponseEntity<EntityModel<CategoryDTO>> updateCategory(@PathVariable long id, @RequestBody CategoryForm form) {
-        CategoryDTO category = categoryService.updateCategory(id, form);
-        return ResponseEntity.ok().body(categoryAssembler.toModel(category));
-    }
+  /**
+   * This method update some data's about the category Check if the name of category already exist
+   *
+   * @param id the identifier of category
+   * @param form the form with new data to update
+   * @return a new response with data updated
+   */
+  @PutMapping("edit/{id}")
+  @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
+  public ResponseEntity<EntityModel<CategoryDTO>> updateCategory(
+      @PathVariable long id, @RequestBody CategoryForm form) {
+    CategoryDTO category = categoryService.updateCategory(id, form);
+    return ResponseEntity.ok().body(categoryAssembler.toModel(category));
+  }
 
-    /**
-     * This method to search a name of category
-     *
-     * @param nameCategory the name of category
-     * @return a list of category
-     */
-    @GetMapping("search/{nameCategory}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
-    public ResponseEntity<CollectionModel<CategoryDTO>> searchCategory(@PathVariable String nameCategory) {
-        List<CategoryDTO> categories = categoryService.searchCategory(nameCategory);
-        return ResponseEntity.ok().body(CollectionModel.of(categories));
-    }
+  /**
+   * This method to search a name of category
+   *
+   * @param nameCategory the name of category
+   * @return a list of category
+   */
+  @GetMapping("search/{nameCategory}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
+  public ResponseEntity<CollectionModel<CategoryDTO>> searchCategory(
+      @PathVariable String nameCategory) {
+    List<CategoryDTO> categories = categoryService.searchCategory(nameCategory);
+    return ResponseEntity.ok().body(CollectionModel.of(categories));
+  }
 
-    /**
-     * This method to delete
-     *
-     * @param id the identifier
-     * @return a message to confirm deleting
-     */
-    @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteCategory(@PathVariable long id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.ok().body("La catégorie a été supprimée avec succès.");
-    }
-
+  /**
+   * This method to delete
+   *
+   * @param id the identifier
+   * @return a message to confirm deleting
+   */
+  @DeleteMapping("delete/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<String> deleteCategory(@PathVariable long id) {
+    categoryService.deleteCategory(id);
+    return ResponseEntity.ok().body("La catégorie a été supprimée avec succès.");
+  }
 }
