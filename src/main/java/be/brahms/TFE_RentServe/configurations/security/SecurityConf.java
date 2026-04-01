@@ -65,6 +65,11 @@ public class SecurityConf {
                         .requestMatchers("/api/favor/new").hasAnyRole("MODERATOR", "ADMIN")
                         .requestMatchers("/api/favor/edit").hasAnyRole("MODERATOR", "ADMIN")
                         .requestMatchers("/api/favor/**").hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                        // Material
+                        .requestMatchers("/api/material/delete/{id}").hasRole("ADMIN")
+                        .requestMatchers("/api/material/new").hasAnyRole("MODERATOR", "ADMIN")
+                        .requestMatchers("/api/material/edit/{id}").hasAnyRole("MODERATOR", "ADMIN")
+                        .requestMatchers("/api/material/**").hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

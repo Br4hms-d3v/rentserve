@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,6 +54,7 @@ public class MaterialController {
      * @return a list of materials
      */
     @GetMapping("list")
+    @PreAuthorize("hasAnyRole('MEMBER','MODERATOR','ADMIN')")
     public ResponseEntity<CollectionModel<MaterialDTO>> findAllMaterials() {
         List<MaterialDTO> materials = materialService.findAllMaterials();
         CollectionModel<MaterialDTO> modelMaterials = materialAssembler.toCollectionModel(materials);
@@ -66,6 +68,7 @@ public class MaterialController {
      * @return data's the favor
      */
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('MEMBER','MODERATOR','ADMIN')")
     public ResponseEntity<EntityModel<MaterialByIdDTO>> findMaterialById(@PathVariable Long id) {
         MaterialByIdDTO materialId = materialService.findMaterialById(id);
         EntityModel<MaterialByIdDTO> modelMaterialId = materialByIdAssembler.toModel(materialId);
@@ -79,6 +82,7 @@ public class MaterialController {
      * @return a list of materials grouped by name of category
      */
     @GetMapping("category/{nameCategory}")
+    @PreAuthorize("hasAnyRole('MEMBER','MODERATOR','ADMIN')")
     public ResponseEntity<CollectionModel<MaterialDTO>> findByCategoryName(@PathVariable String nameCategory) {
         List<MaterialDTO> materials = materialService.findAllMaterialsByCategory(nameCategory);
         CollectionModel<MaterialDTO> modelMaterials = materialAssembler.toCollectionModel(materials);
@@ -92,6 +96,7 @@ public class MaterialController {
      * @return a new material
      */
     @PostMapping("new")
+    @PreAuthorize("hasAnyRole('MODERATOR','ADMIN')")
     public ResponseEntity<EntityModel<MaterialDTO>> createMaterial(@RequestBody @Valid MaterialCreateForm form) {
         MaterialDTO material = materialService.createMaterial(form);
         EntityModel<MaterialDTO> modelMaterial = materialAssembler.toModel(material);
@@ -106,6 +111,7 @@ public class MaterialController {
      * @return a new response with data updated
      */
     @PutMapping("edit/{id}")
+    @PreAuthorize("hasAnyRole('MODERATOR','ADMIN')")
     public ResponseEntity<EntityModel<MaterialDTO>> updateMaterial(@PathVariable Long id, @RequestBody @Valid MaterialUpdateFormDTO form) {
         MaterialDTO material = materialService.updateMaterial(id, form);
         EntityModel<MaterialDTO> modelMaterial = materialAssembler.toModel(material);
@@ -119,6 +125,7 @@ public class MaterialController {
      * @return a message to confirm deleting
      */
     @DeleteMapping("delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteMaterial(@PathVariable Long id) {
         materialService.deleteMaterial(id);
         return ResponseEntity.ok().body("The material has been deleted");
