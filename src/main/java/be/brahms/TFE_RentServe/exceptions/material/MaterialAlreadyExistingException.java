@@ -3,7 +3,7 @@ package be.brahms.TFE_RentServe.exceptions.material;
 /**
  * Exception evoked when the material already existing
  */
-public class MaterialAlreadyExistingException extends RuntimeException {
+public class MaterialAlreadyExistingException extends MaterialException {
     /**
      * This a new exception when the material is exists
      *

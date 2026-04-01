@@ -3,7 +3,7 @@ package be.brahms.TFE_RentServe.exceptions.material;
 /**
  * Exception evoked when the material is empty
  */
-public class MaterialNotEmptyException extends RuntimeException {
+public class MaterialNotEmptyException extends MaterialException {
     /**
      * Make a new exception when the material is empty
      *
