@@ -1,4 +1,3 @@
 package be.brahms.TFE_RentServe.services;
 
-public interface PictureService {
-}
+public interface PictureService {}

@@ -7,13 +7,9 @@ import java.util.UUID;
  *
  * @param confirmationToken The token.
  */
-public record EmailTokenDTO(
-        String confirmationToken
-) {
-    /**
-     * Makes a new EmailTokenDTO.
-     */
-    public EmailTokenDTO() {
-        this(UUID.randomUUID().toString());
-    }
+public record EmailTokenDTO(String confirmationToken) {
+  /** Makes a new EmailTokenDTO. */
+  public EmailTokenDTO() {
+    this(UUID.randomUUID().toString());
+  }
 }

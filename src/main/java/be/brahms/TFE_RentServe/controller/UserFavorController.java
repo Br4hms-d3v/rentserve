@@ -1,4 +1,3 @@
 package be.brahms.TFE_RentServe.controller;
 
-public class UserFavorController {
-}
+public class UserFavorController {}

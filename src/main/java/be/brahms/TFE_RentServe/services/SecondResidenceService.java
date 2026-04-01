@@ -1,4 +1,3 @@
 package be.brahms.TFE_RentServe.services;
 
-public interface SecondResidenceService {
-}
+public interface SecondResidenceService {}
