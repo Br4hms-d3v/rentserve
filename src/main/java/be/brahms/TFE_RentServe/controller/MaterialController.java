@@ -18,6 +18,11 @@ import java.util.List;
 /**
  * This controller manages Material
  * It has a method to display a list of materials
+ * It has a method to display a material by ID
+ * It has a method to display a list of materials by category
+ * It has a method to create a new material
+ * It has a method to update a material
+ * It has a method to delete a material
  *
  * @author Brahim K
  */
@@ -29,6 +34,13 @@ public class MaterialController {
     private final MaterialAssembler materialAssembler;
     private final MaterialByIdAssembler materialByIdAssembler;
 
+    /**
+     * This constructor is used to inject the necessary service for handling material-related request.
+     *
+     * @param materialService       the service used for material management
+     * @param materialAssembler     the assembler used to convert Material to into MaterialDto models
+     * @param materialByIdAssembler the assembler used to convert Material to into MaterialByIdDto models
+     */
     public MaterialController(MaterialService materialService, MaterialAssembler materialAssembler, MaterialByIdAssembler materialByIdAssembler) {
         this.materialService = materialService;
         this.materialAssembler = materialAssembler;

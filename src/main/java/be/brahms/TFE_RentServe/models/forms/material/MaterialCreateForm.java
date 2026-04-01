@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 /**
  * Record MaterialCreateForm to save into a new material Entity
  *
- * @param nameMaterial
- * @param category
- * @param isAvailable
+ * @param nameMaterial the name of material
+ * @param category     the name of category
+ * @param isAvailable  the boolean to check available material
  */
 public record MaterialCreateForm(
         @NotBlank

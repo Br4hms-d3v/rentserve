@@ -40,7 +40,9 @@ public class MaterialServiceImpl implements MaterialService {
     /**
      * Constructor with parameters
      *
-     * @param materialRepository the materialRepository to access material
+     * @param materialRepository the materialRepository to access material data
+     * @param categoryRepository the categoryRepository to access category data
+     * @param materialMapper     map between Form to Entity or Dto to Entity
      */
     public MaterialServiceImpl(MaterialRepository materialRepository, CategoryRepository categoryRepository, MaterialMapper materialMapper) {
         this.materialRepository = materialRepository;
@@ -48,6 +50,12 @@ public class MaterialServiceImpl implements MaterialService {
         this.materialMapper = materialMapper;
     }
 
+    /**
+     * Get a list of all materials
+     * If the list is empty, send a message exception
+     *
+     * @return a list of materials
+     */
     @Override
     public List<MaterialDTO> findAllMaterials() {
         List<Material> materials = materialRepository.findAll();
@@ -186,6 +194,13 @@ public class MaterialServiceImpl implements MaterialService {
         return materialMapper.toDto(materialId);
     }
 
+    /**
+     * Delete a material
+     * Check if the material exists
+     * Check if it used on DataBase
+     *
+     * @param id the identifier of favor
+     */
     @Override
     public void deleteMaterial(Long id) {
         Material materialId = materialRepository.findById(id).orElseThrow(MaterialNotFoundException::new);
