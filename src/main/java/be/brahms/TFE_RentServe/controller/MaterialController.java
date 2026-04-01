@@ -86,10 +86,29 @@ public class MaterialController {
         return ResponseEntity.ok(modelMaterial);
     }
 
+    /**
+     * This method update some data's about the material
+     *
+     * @param id   the identifier of material
+     * @param form the form with new data to update
+     * @return a new response with data updated
+     */
     @PutMapping("edit/{id}")
     public ResponseEntity<EntityModel<MaterialDTO>> updateMaterial(@PathVariable Long id, @RequestBody @Valid MaterialUpdateFormDTO form) {
         MaterialDTO material = materialService.updateMaterial(id, form);
         EntityModel<MaterialDTO> modelMaterial = materialAssembler.toModel(material);
         return ResponseEntity.ok(modelMaterial);
+    }
+
+    /**
+     * This method to delete a material
+     *
+     * @param id the identifier of material
+     * @return a message to confirm deleting
+     */
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> deleteMaterial(@PathVariable Long id) {
+        materialService.deleteMaterial(id);
+        return ResponseEntity.ok().body("The material has been deleted");
     }
 }

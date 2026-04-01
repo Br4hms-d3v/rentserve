@@ -40,10 +40,18 @@ public class MaterialAssembler implements RepresentationModelAssembler<MaterialD
                 linkTo(methodOn(MaterialController.class).findAllMaterials()).withRel("List of materials"),
                 linkTo(methodOn(MaterialController.class).findMaterialById(material.id())).withRel("Get material by ID"),
                 linkTo(methodOn(MaterialController.class).createMaterial(null)).withRel("Create a new material"),
-                linkTo(methodOn(MaterialController.class).updateMaterial(material.id(), null)).withRel("Edit material")
+                linkTo(methodOn(MaterialController.class).updateMaterial(material.id(), null)).withRel("Edit material"),
+                linkTo(methodOn(MaterialController.class).deleteMaterial(material.id())).withRel("Delete material by ID")
         );
     }
 
+    /**
+     * Convert a MaterialDto to EntityModel with HATEOAS links.
+     * This method adds useful links to the Material
+     *
+     * @param materials materials collection and HATEOAS links
+     * @return a list of model with HATEOAS links
+     */
     public CollectionModel<MaterialDTO> toCollectionModel(List<MaterialDTO> materials) {
         return CollectionModel.of(materials,
                 linkTo(methodOn(MaterialController.class).findAllMaterials()).withRel("List of materials")

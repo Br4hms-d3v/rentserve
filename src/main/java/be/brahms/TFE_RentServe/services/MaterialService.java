@@ -52,4 +52,11 @@ public interface MaterialService {
      * @return the updated material
      */
     MaterialDTO updateMaterial(Long id, MaterialUpdateFormDTO form);
+
+    /**
+     * Delete a material
+     *
+     * @param id the identifier of favor
+     */
+    void deleteMaterial(Long id);
 }

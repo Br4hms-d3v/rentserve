@@ -2,9 +2,11 @@ package be.brahms.TFE_RentServe.services.impl;
 
 import be.brahms.TFE_RentServe.exceptions.category.CategoryNotEmptyException;
 import be.brahms.TFE_RentServe.exceptions.category.CategoryNotExistingException;
+import be.brahms.TFE_RentServe.exceptions.database.DatabaseConstraintException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialAlreadyExistingException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialNotEmptyException;
+import be.brahms.TFE_RentServe.exceptions.material.MaterialNotFoundException;
 import be.brahms.TFE_RentServe.mappers.MaterialMapper;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialDTO;
@@ -15,6 +17,7 @@ import be.brahms.TFE_RentServe.models.forms.material.MaterialUpdateFormDTO;
 import be.brahms.TFE_RentServe.repositories.CategoryRepository;
 import be.brahms.TFE_RentServe.repositories.MaterialRepository;
 import be.brahms.TFE_RentServe.services.MaterialService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +68,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public MaterialByIdDTO findMaterialById(Long id) {
-        Material material = materialRepository.findById(id).orElseThrow();
+        Material material = materialRepository.findById(id).orElseThrow(MaterialNotFoundException::new);
 
         return materialMapper.toDtoById(material);
     }
@@ -153,7 +156,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public MaterialDTO updateMaterial(Long id, MaterialUpdateFormDTO form) {
-        Material materialId = materialRepository.findById(id).orElseThrow();
+        Material materialId = materialRepository.findById(id).orElseThrow(MaterialNotFoundException::new);
         Category categoryExist = categoryRepository.findCategoryByNameCategory(form.category());
 
         if (categoryExist == null) {
@@ -181,6 +184,17 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(materialId);
 
         return materialMapper.toDto(materialId);
+    }
+
+    @Override
+    public void deleteMaterial(Long id) {
+        Material materialId = materialRepository.findById(id).orElseThrow(MaterialNotFoundException::new);
+        try {
+            materialRepository.delete(materialId);
+            materialRepository.flush();
+        } catch (DataIntegrityViolationException cause) {
+            throw new DatabaseConstraintException("Can't delete category because it is used by another database");
+        }
     }
 
 }
