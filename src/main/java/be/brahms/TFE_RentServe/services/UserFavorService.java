@@ -15,4 +15,12 @@ public interface UserFavorService {
    * @return list of users favour
    */
   List<UserFavorDTO> findAllUserFavour();
+
+  /**
+   * This method get a list of user favour by Favor ID
+   *
+   * @param favorId the identifier favor
+   * @return a list of users favour grouped by favor id
+   */
+  List<UserFavorDTO> findAllUserFavourByFavorId(long favorId);
 }

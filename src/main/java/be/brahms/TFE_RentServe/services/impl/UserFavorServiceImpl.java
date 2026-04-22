@@ -1,5 +1,7 @@
 package be.brahms.TFE_RentServe.services.impl;
 
+import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
+import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavourEmptyException;
 import be.brahms.TFE_RentServe.mappers.UserFavorMapper;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
@@ -42,6 +44,20 @@ public class UserFavorServiceImpl implements UserFavorService {
 
     if (listUserFavour.isEmpty()) {
       throw new UserFavourEmptyException();
+    }
+    return listUserFavour.stream().map(userFavorMapper::toListDto).toList();
+  }
+
+  @Override
+  public List<UserFavorDTO> findAllUserFavourByFavorId(long favorId) {
+    List<UserFavor> listUserFavour = userFavorRepository.findAllUserFavourByFavorId(favorId);
+
+    if (!userFavorRepository.existsById(favorId)) {
+      throw new UserFavorNotFoundException();
+    }
+
+    if (listUserFavour.isEmpty()) {
+      throw new FavorNotFoundException();
     }
     return listUserFavour.stream().map(userFavorMapper::toListDto).toList();
   }

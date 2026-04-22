@@ -23,7 +23,9 @@ public class UserFavorAssembler
     return EntityModel.of(
         userFavor,
         linkTo(methodOn(UserFavorController.class).getAllUserFavour())
-            .withRel("List of users favour"));
+            .withRel("List of users favour"),
+        linkTo(methodOn(UserFavorController.class).getUserFavourByFavorId(userFavor.id()))
+            .withRel("List of users favour grouped by favor ID"));
   }
 
   /**

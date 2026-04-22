@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +34,21 @@ public class UserFavorController {
     List<UserFavorDTO> userFavour = userFavorService.findAllUserFavour();
     CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
         userFavorAssembler.toCollectionModel(userFavour);
+    return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
+
+  /**
+   * Get a list of all users favour
+   *
+   * @param favorId the identifier favor
+   * @return a list of users favour grouped by favor ID
+   */
+  @GetMapping("list/{favorId}")
+  public ResponseEntity<CollectionModel<UserFavorDTO>> getUserFavourByFavorId(
+      @PathVariable long favorId) {
+    List<UserFavorDTO> userFavor = userFavorService.findAllUserFavourByFavorId(favorId);
+    CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
+        userFavorAssembler.toCollectionModel(userFavor);
     return ResponseEntity.ok().body(userFavorDTOCollectionModel);
   }
 }
