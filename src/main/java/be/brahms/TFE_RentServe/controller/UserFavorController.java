@@ -31,6 +31,8 @@ public class UserFavorController {
   @GetMapping("list")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getAllUserFavour() {
     List<UserFavorDTO> userFavour = userFavorService.findAllUserFavour();
-    return ResponseEntity.ok().body(CollectionModel.of(userFavour));
+    CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
+        userFavorAssembler.toCollectionModel(userFavour);
+    return ResponseEntity.ok().body(userFavorDTOCollectionModel);
   }
 }
