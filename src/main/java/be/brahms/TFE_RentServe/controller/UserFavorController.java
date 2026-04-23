@@ -1,10 +1,12 @@
 package be.brahms.TFE_RentServe.controller;
 
 import be.brahms.TFE_RentServe.hateoas.userFavor.UserFavorAssembler;
+import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.services.UserFavorService;
 import java.util.List;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,5 +52,17 @@ public class UserFavorController {
     CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
         userFavorAssembler.toCollectionModel(userFavor);
     return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
+
+  /**
+   * Get a detail about the user favor by ID
+   *
+   * @param id the identifier of User favor
+   * @return a detail about the user favor
+   */
+  @GetMapping("{id}")
+  public ResponseEntity<EntityModel<UserFavorByIdDTO>> getUserFavorById(@PathVariable long id) {
+    UserFavorByIdDTO userFavorId = userFavorService.findUserFavorById(id);
+    return ResponseEntity.ok().body(userFavorAssembler.toIdModel(userFavorId));
   }
 }

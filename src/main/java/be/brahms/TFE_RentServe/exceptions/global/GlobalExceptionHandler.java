@@ -14,6 +14,9 @@ import be.brahms.TFE_RentServe.exceptions.material.MaterialAlreadyExistingExcept
 import be.brahms.TFE_RentServe.exceptions.material.MaterialException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialNotEmptyException;
 import be.brahms.TFE_RentServe.exceptions.user.*;
+import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorException;
+import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
+import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavourEmptyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -454,6 +457,63 @@ public class GlobalExceptionHandler {
         ApiError.of(
             HttpStatus.FOUND.value(), HttpStatus.FOUND.getReasonPhrase(), except.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.FOUND);
+  }
+
+  // User Favor
+
+  /**
+   * Handles errors specific to user favor operations.
+   *
+   * @param except the UserFavorException containing the error message
+   * @return a response with the error message and HTTP 400 status
+   */
+  @ExceptionHandler(UserFavorException.class)
+  public ResponseEntity<ApiError> handleUserFavorException(UserFavorException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Handles UserFavorNotFoundException and sends a 404 NOT_FOUND error.
+   *
+   * <p>This method is called automatically when the user favor doesn't exist. It creates an
+   * ApiError and sends it to the frontend.
+   *
+   * @param except The exception that was thrown (UserFavorNotFoundException).
+   * @return A response with an apiError and HTTP status 404 (NOT_FOUND).
+   */
+  @ExceptionHandler(UserFavorNotFoundException.class)
+  public ResponseEntity<ApiError> handleUserFavorNotFoundException(
+      UserFavorNotFoundException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+  }
+
+  /**
+   * Handles UserFavourEmptyException and sends a 404 NOT_FOUND error.
+   *
+   * <p>This method is called automatically when the user favor is empty. It creates an ApiError and
+   * sends it to the frontend.
+   *
+   * @param except The exception that was thrown (UserFavourEmptyException).
+   * @return A response with an apiError and HTTP status 404 (NOT_FOUND).
+   */
+  @ExceptionHandler(UserFavourEmptyException.class)
+  public ResponseEntity<ApiError> handleUserFavourEmptyException(UserFavourEmptyException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
   }
 
   // Database

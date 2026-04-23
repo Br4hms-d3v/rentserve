@@ -4,6 +4,7 @@ import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavourEmptyException;
 import be.brahms.TFE_RentServe.mappers.UserFavorMapper;
+import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
 import be.brahms.TFE_RentServe.repositories.UserFavorRepository;
@@ -48,6 +49,12 @@ public class UserFavorServiceImpl implements UserFavorService {
     return listUserFavour.stream().map(userFavorMapper::toListDto).toList();
   }
 
+  /**
+   * Get a list of all users favour grouped by ID favor
+   *
+   * @param favorId the identifier favor
+   * @return a list of user favor by Favor ID
+   */
   @Override
   public List<UserFavorDTO> findAllUserFavourByFavorId(long favorId) {
     List<UserFavor> listUserFavour = userFavorRepository.findAllUserFavourByFavorId(favorId);
@@ -60,5 +67,19 @@ public class UserFavorServiceImpl implements UserFavorService {
       throw new FavorNotFoundException();
     }
     return listUserFavour.stream().map(userFavorMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a user favor by id
+   *
+   * @param id the identifier of user favor
+   * @return a detail user favor
+   */
+  @Override
+  public UserFavorByIdDTO findUserFavorById(long id) {
+    UserFavor userFavorId =
+        userFavorRepository.findById(id).orElseThrow(UserFavorNotFoundException::new);
+
+    return userFavorMapper.toIdDto(userFavorId);
   }
 }

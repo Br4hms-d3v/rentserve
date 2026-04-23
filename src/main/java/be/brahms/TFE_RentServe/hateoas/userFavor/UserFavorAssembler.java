@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import be.brahms.TFE_RentServe.controller.UserFavorController;
+import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import java.util.List;
 import org.springframework.hateoas.CollectionModel;
@@ -25,7 +26,9 @@ public class UserFavorAssembler
         linkTo(methodOn(UserFavorController.class).getAllUserFavour())
             .withRel("List of users favour"),
         linkTo(methodOn(UserFavorController.class).getUserFavourByFavorId(userFavor.id()))
-            .withRel("List of users favour grouped by favor ID"));
+            .withRel("List of users favour grouped by favor ID"),
+        linkTo(methodOn(UserFavorController.class).getUserFavorById(userFavor.id()))
+            .withRel("User favor by id"));
   }
 
   /**
@@ -40,5 +43,19 @@ public class UserFavorAssembler
         userFavour,
         linkTo(methodOn(UserFavorController.class).getAllUserFavour())
             .withRel("List of users favour"));
+  }
+
+  /**
+   * Convert a userFavorByIdDto to EntityModel with HATEOAS links. This method adds useful links to
+   * the UserFavorID
+   *
+   * @param userFavorByIdDTO the user favor entity model by ID and links
+   * @return a list of model with HATEOAS links
+   */
+  public EntityModel<UserFavorByIdDTO> toIdModel(UserFavorByIdDTO userFavorByIdDTO) {
+    return EntityModel.of(
+        userFavorByIdDTO,
+        linkTo(methodOn(UserFavorController.class).getUserFavorById(userFavorByIdDTO.id()))
+            .withRel("user favor by id: " + userFavorByIdDTO.id()));
   }
 }

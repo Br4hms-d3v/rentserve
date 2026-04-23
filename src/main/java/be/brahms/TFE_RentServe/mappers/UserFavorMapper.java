@@ -1,8 +1,12 @@
 package be.brahms.TFE_RentServe.mappers;
 
+import be.brahms.TFE_RentServe.models.dtos.favor.FavorNameDTO;
+import be.brahms.TFE_RentServe.models.dtos.user.UserPseudoDTO;
+import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.models.entities.Picture;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -35,5 +39,31 @@ public interface UserFavorMapper {
 
     return new UserFavorDTO(
         userFavor.getId(), userFavor.getPriceHourFavor(), userFavor.isAvailable(), firstPicture);
+  }
+
+  /**
+   * Convert a user favor to a UserFavorByIdDTO Get more details : - description about the favor -
+   * list of pictures - the price per hour - the owner user - the name of favor
+   *
+   * @param userFavor the user favor entity
+   * @return a user favor details
+   */
+  default UserFavorByIdDTO toIdDto(UserFavor userFavor) {
+    List<String> pictures = userFavor.getPictures().stream().map(Picture::getNamePicture).toList();
+
+    // Get the pseudo from user
+    UserPseudoDTO userPseudo = new UserPseudoDTO(userFavor.getUser().getPseudo());
+
+    // Get the name from favor
+    FavorNameDTO favorName = new FavorNameDTO(userFavor.getFavor().getNameFavor());
+
+    return new UserFavorByIdDTO(
+        userFavor.getId(),
+        userFavor.getDescriptionFavor(),
+        userFavor.getPriceHourFavor(),
+        userFavor.isAvailable(),
+        pictures,
+        userPseudo,
+        favorName);
   }
 }

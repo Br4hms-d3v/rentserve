@@ -1,5 +1,6 @@
 package be.brahms.TFE_RentServe.services;
 
+import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import java.util.List;
 
@@ -23,4 +24,12 @@ public interface UserFavorService {
    * @return a list of users favour grouped by favor id
    */
   List<UserFavorDTO> findAllUserFavourByFavorId(long favorId);
+
+  /**
+   * This method get a list of user favor by ID
+   *
+   * @param id the identifier of user favor
+   * @return a detail about the user favor
+   */
+  UserFavorByIdDTO findUserFavorById(long id);
 }
