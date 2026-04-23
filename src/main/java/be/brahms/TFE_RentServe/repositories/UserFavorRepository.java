@@ -22,4 +22,13 @@ public interface UserFavorRepository extends JpaRepository<UserFavor, Long> {
    */
   @Query("SELECT uf FROM UserFavor uf WHERE uf.favor.id = :favorId AND uf.isAvailable")
   List<UserFavor> findAllUserFavourByFavorId(@Param("favorId") long favorId);
+
+  /**
+   * Find all users favour by user ID
+   *
+   * @param userId the identifier user
+   * @return a list of user favour grouped by id user
+   */
+  @Query("SELECT uf FROM UserFavor uf WHERE uf.user.id = :userId AND uf.isAvailable")
+  List<UserFavor> findAllUserFavourByUserId(@Param("userId") long userId);
 }

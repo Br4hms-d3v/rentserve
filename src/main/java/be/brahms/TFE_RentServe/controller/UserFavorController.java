@@ -65,4 +65,18 @@ public class UserFavorController {
     UserFavorByIdDTO userFavorId = userFavorService.findUserFavorById(id);
     return ResponseEntity.ok().body(userFavorAssembler.toIdModel(userFavorId));
   }
+
+  /**
+   * Get a list of user favor grouped by User
+   *
+   * @param id the identifier from User
+   * @return a list of user favor by user id
+   */
+  @GetMapping("user/{id}")
+  public ResponseEntity<CollectionModel<UserFavorDTO>> getUserFavorByUserId(@PathVariable long id) {
+    List<UserFavorDTO> userFavorByUserId = userFavorService.findAllUserFavourByUserId(id);
+    CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
+        userFavorAssembler.toCollectionModel(userFavorByUserId);
+    return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
 }
