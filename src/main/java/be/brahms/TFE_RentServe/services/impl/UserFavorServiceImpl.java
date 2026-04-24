@@ -2,6 +2,7 @@ package be.brahms.TFE_RentServe.services.impl;
 
 import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.user.UserNotFoundException;
+import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavourEmptyException;
 import be.brahms.TFE_RentServe.mappers.UserFavorMapper;
@@ -9,6 +10,7 @@ import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
 import be.brahms.TFE_RentServe.repositories.UserFavorRepository;
+import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserFavorService;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class UserFavorServiceImpl implements UserFavorService {
 
   private final UserFavorRepository userFavorRepository;
   private final UserFavorMapper userFavorMapper;
+  private final UserRepository userRepository;
 
   /**
    * Constructor with parameters
@@ -30,9 +33,12 @@ public class UserFavorServiceImpl implements UserFavorService {
    * @param userFavorMapper map between from userFavor to entity or dto to entity
    */
   public UserFavorServiceImpl(
-      UserFavorRepository userFavorRepository, UserFavorMapper userFavorMapper) {
+      UserFavorRepository userFavorRepository,
+      UserFavorMapper userFavorMapper,
+      UserRepository userRepository) {
     this.userFavorRepository = userFavorRepository;
     this.userFavorMapper = userFavorMapper;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -94,7 +100,7 @@ public class UserFavorServiceImpl implements UserFavorService {
   public List<UserFavorDTO> findAllUserFavourByUserId(long id) {
     List<UserFavor> listUserFavorByUser = userFavorRepository.findAllUserFavourByUserId(id);
 
-    if (!userFavorRepository.existsById(id)) {
+    if (userRepository.findById(id).isEmpty()) {
       throw new UserNotFoundException();
     }
 
@@ -102,5 +108,41 @@ public class UserFavorServiceImpl implements UserFavorService {
       throw new UserFavorNotFoundException();
     }
     return listUserFavorByUser.stream().map(userFavorMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a list of user favour from the owner's user and available
+   *
+   * @param userId the user identifier
+   * @return a list of user favour from user ID and available true
+   */
+  @Override
+  public List<UserFavorDTO> findAllUserFavourIsActivated(long userId) {
+    List<UserFavor> userFavorDTOListAvailable =
+        userFavorRepository.findAllUserFavourIsActivated(userId);
+    userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+    if (userFavorDTOListAvailable.isEmpty()) {
+      throw new UserFavorException("The list with user favour is empty");
+    }
+    return userFavorDTOListAvailable.stream().map(userFavorMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a list of user favour from the owner's user and is not available
+   *
+   * @param userId the user identifier
+   * @return a list of user favour from user ID and available is false
+   */
+  @Override
+  public List<UserFavorDTO> findAllUserFavourIsDeactivated(long userId) {
+    List<UserFavor> userFavorDTOListNotAvailable =
+        userFavorRepository.findAllUserFavourIsDeactivated(userId);
+    userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+    if (userFavorDTOListNotAvailable.isEmpty()) {
+      throw new UserFavorException("The list with user favour is empty");
+    }
+    return userFavorDTOListNotAvailable.stream().map(userFavorMapper::toListDto).toList();
   }
 }

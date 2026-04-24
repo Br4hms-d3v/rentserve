@@ -40,4 +40,20 @@ public interface UserFavorService {
    * @return a list of users favour grouped by user id
    */
   List<UserFavorDTO> findAllUserFavourByUserId(long userId);
+
+  /**
+   * This method get a list of user favour from user id and available
+   *
+   * @param userId the user identifier
+   * @return a list of user favour from user and is available
+   */
+  List<UserFavorDTO> findAllUserFavourIsActivated(long userId);
+
+  /**
+   * This method get a list of user favour from user id and is not available
+   *
+   * @param userId the user identifier
+   * @return a list of user favour from user and is not available
+   */
+  List<UserFavorDTO> findAllUserFavourIsDeactivated(long userId);
 }

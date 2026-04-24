@@ -79,4 +79,34 @@ public class UserFavorController {
         userFavorAssembler.toCollectionModel(userFavorByUserId);
     return ResponseEntity.ok().body(userFavorDTOCollectionModel);
   }
+
+  /**
+   * Get a list of user favor activated from the user ID owner
+   *
+   * @param id the identifier user
+   * @return a list of user favor activated
+   */
+  @GetMapping("user/{id}/activated")
+  public ResponseEntity<CollectionModel<UserFavorDTO>> getActivatedUserFavour(
+      @PathVariable long id) {
+    List<UserFavorDTO> userFavorIsActivated = userFavorService.findAllUserFavourIsActivated(id);
+    CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
+        userFavorAssembler.toCollectionModel(userFavorIsActivated);
+    return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
+
+  /**
+   * Get a list of user favor deactivated from the user ID owner
+   *
+   * @param id the identifier user
+   * @return a list of user favor deactivated
+   */
+  @GetMapping("user/{id}/deactivated")
+  public ResponseEntity<CollectionModel<UserFavorDTO>> getDeactivatedUserFavour(
+      @PathVariable long id) {
+    List<UserFavorDTO> userFavorIsDeactivated = userFavorService.findAllUserFavourIsDeactivated(id);
+    CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
+        userFavorAssembler.toCollectionModel(userFavorIsDeactivated);
+    return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
 }
