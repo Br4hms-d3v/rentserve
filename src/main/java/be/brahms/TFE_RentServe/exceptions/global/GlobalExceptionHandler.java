@@ -528,13 +528,12 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(PictureException.class)
   public ResponseEntity<ApiError> handlePictureException(PictureException except) {
     ApiError apiError =
-            ApiError.of(
-                    HttpStatus.BAD_REQUEST.value(),
-                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                    except.getMessage());
+        ApiError.of(
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            except.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
   }
-
 
   // Database
 

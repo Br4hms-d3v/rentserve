@@ -4,7 +4,6 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,23 +11,20 @@ import java.util.List;
  * Record UserFavor CreateForm into a UserFavor entity
  *
  * @param descriptionFavor The description about the favor
- * @param priceHourFavor   The price to rent per hour
- * @param isAvailable      the know if is it available to rent
- * @param favorId          the identifier favor
- * @param pictures         the name of pictures
- * @param userId           the identifier of user
+ * @param priceHourFavor The price to rent per hour
+ * @param isAvailable the know if is it available to rent
+ * @param favorId the identifier favor
+ * @param pictures the name of pictures
+ * @param userId the identifier of user
  */
 public record UserFavorCreateForm(
-        @NotBlank
-        String descriptionFavor,
-        @Digits(integer = 4, fraction = 2) // 4 numbers before the dot and 2 after the dot
-        @DecimalMin(value = "5.0", inclusive = false) // The value can be start 5.0 or more but never under
+    @NotBlank String descriptionFavor,
+    @Digits(integer = 4, fraction = 2) // 4 numbers before the dot and 2 after the dot
+        @DecimalMin(
+            value = "5.0",
+            inclusive = false) // The value can be start 5.0 or more but never under
         BigDecimal priceHourFavor,
-        @NotNull
-        Boolean isAvailable,
-        @NotNull
-        Long favorId,
-        List<String> pictures,
-        Long userId
-) {
-}
+    @NotNull Boolean isAvailable,
+    @NotNull Long favorId,
+    List<String> pictures,
+    Long userId) {}

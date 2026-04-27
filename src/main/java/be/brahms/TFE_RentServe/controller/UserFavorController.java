@@ -5,9 +5,8 @@ import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import be.brahms.TFE_RentServe.services.UserFavorService;
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -117,8 +116,9 @@ public class UserFavorController {
    * @return a new User favor
    */
   @PostMapping("{new}")
-    public ResponseEntity<EntityModel<UserFavorDTO>> createUserFavor(@RequestBody @Valid UserFavorCreateForm form){
+  public ResponseEntity<EntityModel<UserFavorDTO>> createUserFavor(
+      @RequestBody @Valid UserFavorCreateForm form) {
     UserFavorDTO newUserFavor = userFavorService.createUserFavor(form);
-      return ResponseEntity.ok().body(userFavorAssembler.toModel(newUserFavor));
+    return ResponseEntity.ok().body(userFavorAssembler.toModel(newUserFavor));
   }
 }
