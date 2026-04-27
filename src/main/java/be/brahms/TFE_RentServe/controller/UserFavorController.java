@@ -3,15 +3,15 @@ package be.brahms.TFE_RentServe.controller;
 import be.brahms.TFE_RentServe.hateoas.userFavor.UserFavorAssembler;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
+import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import be.brahms.TFE_RentServe.services.UserFavorService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user-favor/")
@@ -108,5 +108,17 @@ public class UserFavorController {
     CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
         userFavorAssembler.toCollectionModel(userFavorIsDeactivated);
     return ResponseEntity.ok().body(userFavorDTOCollectionModel);
+  }
+
+  /**
+   * Create a new UseFavor
+   *
+   * @param form the form to create a new User Favor
+   * @return a new User favor
+   */
+  @PostMapping("{new}")
+    public ResponseEntity<EntityModel<UserFavorDTO>> createUserFavor(@RequestBody @Valid UserFavorCreateForm form){
+    UserFavorDTO newUserFavor = userFavorService.createUserFavor(form);
+      return ResponseEntity.ok().body(userFavorAssembler.toModel(newUserFavor));
   }
 }

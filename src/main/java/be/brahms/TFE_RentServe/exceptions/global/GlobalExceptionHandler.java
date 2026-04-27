@@ -13,6 +13,7 @@ import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialAlreadyExistingException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialException;
 import be.brahms.TFE_RentServe.exceptions.material.MaterialNotEmptyException;
+import be.brahms.TFE_RentServe.exceptions.picture.PictureException;
 import be.brahms.TFE_RentServe.exceptions.user.*;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
@@ -515,6 +516,25 @@ public class GlobalExceptionHandler {
             except.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
   }
+
+  // Picture
+
+  /**
+   * Handles errors specific to picture operations.
+   *
+   * @param except the PictureException containing the error message
+   * @return a response with the error message and HTTP 400 status
+   */
+  @ExceptionHandler(PictureException.class)
+  public ResponseEntity<ApiError> handlePictureException(PictureException except) {
+    ApiError apiError =
+            ApiError.of(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
+
 
   // Database
 
