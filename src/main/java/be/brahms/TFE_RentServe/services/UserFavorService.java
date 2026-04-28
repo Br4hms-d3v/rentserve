@@ -2,6 +2,7 @@ package be.brahms.TFE_RentServe.services;
 
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
+import be.brahms.TFE_RentServe.models.forms.userFavor.UpdateUserFavorForm;
 import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -66,4 +67,13 @@ public interface UserFavorService {
    * @return the saved user favor
    */
   UserFavorDTO createUserFavor(@Valid UserFavorCreateForm form);
+
+  /**
+   * This method update the existing user favor
+   *
+   * @param id the identifier of user favor
+   * @param form the form to update the user favor
+   * @return a user favor updated
+   */
+  UserFavorDTO updateUserFavor(long id, @Valid UpdateUserFavorForm form);
 }

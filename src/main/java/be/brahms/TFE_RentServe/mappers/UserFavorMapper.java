@@ -6,9 +6,11 @@ import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
 import be.brahms.TFE_RentServe.models.entities.Picture;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
+import be.brahms.TFE_RentServe.models.forms.userFavor.UpdateUserFavorForm;
 import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import java.util.List;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -97,4 +99,12 @@ public interface UserFavorMapper {
 
     return picture;
   }
+
+  /**
+   * Convert a UserFavorForm to a UserFavor entity. Used when updated a user favor
+   *
+   * @param form the user favor update form
+   * @param userFavor the user favor entity
+   */
+  void fromUpdateUserFavorForm(UpdateUserFavorForm form, @MappingTarget UserFavor userFavor);
 }

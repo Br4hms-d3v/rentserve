@@ -3,6 +3,7 @@ package be.brahms.TFE_RentServe.controller;
 import be.brahms.TFE_RentServe.hateoas.userFavor.UserFavorAssembler;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userFavor.UserFavorDTO;
+import be.brahms.TFE_RentServe.models.forms.userFavor.UpdateUserFavorForm;
 import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import be.brahms.TFE_RentServe.services.UserFavorService;
 import jakarta.validation.Valid;
@@ -120,5 +121,19 @@ public class UserFavorController {
       @RequestBody @Valid UserFavorCreateForm form) {
     UserFavorDTO newUserFavor = userFavorService.createUserFavor(form);
     return ResponseEntity.ok().body(userFavorAssembler.toModel(newUserFavor));
+  }
+
+  /**
+   * Update the useFavor
+   *
+   * @param id the identifier of user favor
+   * @param form the form to update the user favor
+   * @return a user favor updated
+   */
+  @PutMapping("{id}/edit")
+  public ResponseEntity<EntityModel<UserFavorDTO>> updateUserFavor(
+      @PathVariable long id, @RequestBody UpdateUserFavorForm form) {
+    UserFavorDTO userFavor = userFavorService.updateUserFavor(id, form);
+    return ResponseEntity.ok().body(userFavorAssembler.toModel(userFavor));
   }
 }

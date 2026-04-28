@@ -1,7 +1,6 @@
 package be.brahms.TFE_RentServe.services.impl;
 
 import be.brahms.TFE_RentServe.exceptions.favor.FavorNotFoundException;
-import be.brahms.TFE_RentServe.exceptions.picture.PictureException;
 import be.brahms.TFE_RentServe.exceptions.user.UserNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
@@ -13,6 +12,7 @@ import be.brahms.TFE_RentServe.models.entities.Favor;
 import be.brahms.TFE_RentServe.models.entities.Picture;
 import be.brahms.TFE_RentServe.models.entities.User;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
+import be.brahms.TFE_RentServe.models.forms.userFavor.UpdateUserFavorForm;
 import be.brahms.TFE_RentServe.models.forms.userFavor.UserFavorCreateForm;
 import be.brahms.TFE_RentServe.repositories.FavorRepository;
 import be.brahms.TFE_RentServe.repositories.PictureRepository;
@@ -205,14 +205,45 @@ public class UserFavorServiceImpl implements UserFavorService {
               .map(pictureRepository::save)
               .collect(Collectors.toSet());
 
-      if (pictures.isEmpty()) {
-        throw new PictureException("You must have a minimum picture");
-      }
-
       userFavor.setPictures(pictures);
 
       userFavorRepository.save(userFavor);
     }
+    return userFavorMapper.toDto(userFavor);
+  }
+
+  /**
+   * Update a userFavor
+   *
+   * @param id the identifier of user favor
+   * @param form the form to update the user favor
+   * @return an updated userFavor
+   */
+  @Override
+  public UserFavorDTO updateUserFavor(long id, UpdateUserFavorForm form) {
+
+    Favor favorById =
+        favorRepository.findById(form.favorId()).orElseThrow(FavorNotFoundException::new);
+    UserFavor userFavor = userFavorRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+    Long existingFavorId = userFavor.getFavor() != null ? userFavor.getFavor().getId() : null;
+    Long newFavorId = userFavor.getFavor() != null ? userFavor.getFavor().getId() : null;
+
+    if (newFavorId != null && !newFavorId.equals(existingFavorId)) {
+      Favor newFavor =
+          favorRepository.findById(newFavorId).orElseThrow(FavorNotFoundException::new);
+      userFavor.setFavor(newFavor);
+    }
+
+    userFavor.setDescriptionFavor(form.descriptionFavor());
+    userFavor.setPriceHourFavor(form.priceHourFavor());
+    userFavor.setAvailable(form.isAvailable());
+    userFavor.setFavor(favorById);
+
+    userFavorMapper.fromUpdateUserFavorForm(form, userFavor);
+
+    userFavorRepository.save(userFavor);
+
     return userFavorMapper.toDto(userFavor);
   }
 }

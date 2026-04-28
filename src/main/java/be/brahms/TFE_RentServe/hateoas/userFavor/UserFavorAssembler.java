@@ -60,6 +60,8 @@ public class UserFavorAssembler
     return EntityModel.of(
         userFavorByIdDTO,
         linkTo(methodOn(UserFavorController.class).getUserFavorById(userFavorByIdDTO.id()))
-            .withRel("user favor by id: " + userFavorByIdDTO.id()));
+            .withRel("user favor by id: " + userFavorByIdDTO.id()),
+        linkTo(methodOn(UserFavorController.class).updateUserFavor(userFavorByIdDTO.id(), null))
+            .withRel("Update user favor by ID"));
   }
 }
