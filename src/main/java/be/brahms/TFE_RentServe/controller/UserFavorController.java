@@ -13,6 +13,23 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This controller manages user favor
+ *
+ * <ul>
+ *   <li>Get a list of user favour
+ *   <li>Get a list of user favour by favor ID
+ *   <li>Get a list of user favour activated
+ *   <li>Get a list of user favour deactivated
+ *   <li>Get details of the user favor by his ID
+ *   <li>Get a list of user favor by grouped user ID
+ *   <li>Update a user favor
+ *   <li>Delete a user favor by ID
+ *   <li>Create a new user favor
+ * </ul>
+ *
+ * @author Brahim K
+ */
 @RestController
 @RequestMapping("/api/user-favor/")
 public class UserFavorController {
@@ -20,6 +37,13 @@ public class UserFavorController {
   private final UserFavorService userFavorService;
   private final UserFavorAssembler userFavorAssembler;
 
+  /**
+   * This constructor is used to inject the necessary service for handling user favor related
+   * request
+   *
+   * @param userFavorService the service used for user favor management
+   * @param userFavorAssembler the assembler used to convert User favor object to into UserFavorDto
+   */
   public UserFavorController(
       UserFavorService userFavorService, UserFavorAssembler userFavorAssembler) {
     this.userFavorService = userFavorService;
@@ -137,6 +161,12 @@ public class UserFavorController {
     return ResponseEntity.ok().body(userFavorAssembler.toModel(userFavor));
   }
 
+  /**
+   * Delete the userFavor
+   *
+   * @param id the identifier of user favor
+   * @return a message to confirm delete
+   */
   @DeleteMapping("{id}/delete")
   public ResponseEntity<String> deleteUserFavorById(@PathVariable long id) {
     userFavorService.deleteUserFavor(id);

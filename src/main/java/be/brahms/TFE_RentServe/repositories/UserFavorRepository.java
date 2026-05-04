@@ -51,7 +51,19 @@ public interface UserFavorRepository extends JpaRepository<UserFavor, Long> {
   @Query("SELECT uf FROM UserFavor uf WHERE uf.user.id = :userId AND uf.isAvailable = false")
   List<UserFavor> findAllUserFavourIsDeactivated(@Param("userId") long userId);
 
+  /**
+   * Get the id of user
+   *
+   * @param user the user
+   * @return an id of user
+   */
   Long user(User user);
 
+  /**
+   * Get a boolean true or false if the picture exists or not
+   *
+   * @param id the identifier of picture
+   * @return a boolean true or false
+   */
   boolean existsByPictures_Id(long id);
 }

@@ -88,6 +88,13 @@ public interface UserFavorMapper {
    */
   UserFavor fromUserFavorForm(UserFavorCreateForm form);
 
+  /**
+   * Create a Picture object from a picture name. If the name is null or empty, a default picture
+   * name is used.
+   *
+   * @param namePicture the name of the picture
+   * @return a picture object with a valid name
+   */
   default Picture map(String namePicture) {
     Picture picture = new Picture();
 

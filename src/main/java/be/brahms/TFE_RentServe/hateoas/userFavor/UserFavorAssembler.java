@@ -19,6 +19,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserFavorAssembler
     implements RepresentationModelAssembler<UserFavorDTO, EntityModel<UserFavorDTO>> {
+
+  /** Constructor by default for CategoryAssembler */
+  public UserFavorAssembler() {}
+
+  /**
+   * Convert a UserFavorDto to an EntityModel with HATEOAS links. These methods add links to the
+   * UserFavorDto, a link for UserFavor : - Get a list of user favour - Get a list of user favour
+   * group by Favor ID - Get a details by id favor - Get a form to create a userFavor - Delete a
+   * user favor by ID
+   *
+   * @param userFavor the user favor data to wrap
+   * @return an EntityModel with the userFavor data and HATEOAS links
+   */
   @Override
   public EntityModel<UserFavorDTO> toModel(UserFavorDTO userFavor) {
     return EntityModel.of(
