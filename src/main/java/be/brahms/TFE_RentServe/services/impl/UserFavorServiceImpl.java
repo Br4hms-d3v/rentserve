@@ -19,10 +19,8 @@ import be.brahms.TFE_RentServe.repositories.PictureRepository;
 import be.brahms.TFE_RentServe.repositories.UserFavorRepository;
 import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserFavorService;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import jakarta.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -245,5 +243,36 @@ public class UserFavorServiceImpl implements UserFavorService {
     userFavorRepository.save(userFavor);
 
     return userFavorMapper.toDto(userFavor);
+  }
+
+  /**
+   * Delete a user favor remove all identifier in relationship with picture_user_favor remove all
+   * picture from picture database
+   *
+   * @param id the identifier of user favor
+   */
+  @Transactional
+  public void deleteUserFavor(long id) {
+
+    UserFavor userFavor =
+        userFavorRepository.findById(id).orElseThrow(UserFavorNotFoundException::new);
+
+    // Copy the pictures before to break the relationShip UserFavor to Picture
+    Set<Picture> pictures = new HashSet<>(userFavor.getPictures());
+
+    // Break the relationship and clears all pictures
+    userFavor.getPictures().clear();
+    userFavorRepository.save(userFavor);
+
+    // Delete pictures
+    userFavorRepository.delete(userFavor);
+
+    // Remove like orphan remove
+    for (Picture p : pictures) {
+      boolean stillUsed = userFavorRepository.existsByPictures_Id(p.getId());
+      if (!stillUsed) {
+        pictureRepository.delete(p);
+      }
+    }
   }
 }

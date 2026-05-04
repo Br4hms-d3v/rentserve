@@ -82,6 +82,9 @@ public class UserServiceImpl implements UserService {
       throw new PseudoExistException();
     }
 
+    // Add role member
+    user.setRole(Role.MEMBER);
+
     // Check if the user has been more than 18 years old
     if (!user.getBirthdate().isBefore(LocalDate.now().minusYears(18))) {
       throw new UserException("Il n'est pas possible de vous inscrire car vous êtes mineur");

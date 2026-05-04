@@ -76,4 +76,11 @@ public interface UserFavorService {
    * @return a user favor updated
    */
   UserFavorDTO updateUserFavor(long id, @Valid UpdateUserFavorForm form);
+
+  /**
+   * This method delete a userFavor
+   *
+   * @param id the identifier of user favor
+   */
+  void deleteUserFavor(long id);
 }

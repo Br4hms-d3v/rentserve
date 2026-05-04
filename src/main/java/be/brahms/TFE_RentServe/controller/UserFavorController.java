@@ -136,4 +136,10 @@ public class UserFavorController {
     UserFavorDTO userFavor = userFavorService.updateUserFavor(id, form);
     return ResponseEntity.ok().body(userFavorAssembler.toModel(userFavor));
   }
+
+  @DeleteMapping("{id}/delete")
+  public ResponseEntity<String> deleteUserFavorById(@PathVariable long id) {
+    userFavorService.deleteUserFavor(id);
+    return ResponseEntity.ok().body("The userFavor has been deleted with success");
+  }
 }

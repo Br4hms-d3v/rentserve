@@ -1,5 +1,6 @@
 package be.brahms.TFE_RentServe.repositories;
 
+import be.brahms.TFE_RentServe.models.entities.User;
 import be.brahms.TFE_RentServe.models.entities.UserFavor;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,4 +50,8 @@ public interface UserFavorRepository extends JpaRepository<UserFavor, Long> {
    */
   @Query("SELECT uf FROM UserFavor uf WHERE uf.user.id = :userId AND uf.isAvailable = false")
   List<UserFavor> findAllUserFavourIsDeactivated(@Param("userId") long userId);
+
+  Long user(User user);
+
+  boolean existsByPictures_Id(long id);
 }
