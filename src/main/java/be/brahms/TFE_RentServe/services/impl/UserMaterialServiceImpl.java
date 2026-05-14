@@ -1,10 +1,13 @@
 package be.brahms.TFE_RentServe.services.impl;
 
+import be.brahms.TFE_RentServe.exceptions.user.UserNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialEmptyException;
+import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialException;
 import be.brahms.TFE_RentServe.mappers.UserMaterialMapper;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
 import be.brahms.TFE_RentServe.repositories.UserMaterialRepository;
+import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserMaterialService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ public class UserMaterialServiceImpl implements UserMaterialService {
 
   private final UserMaterialRepository userMaterialRepository;
   private final UserMaterialMapper userMaterialMapper;
+  private final UserRepository userRepository;
 
   /**
    * Constructor with parameters
@@ -28,9 +32,12 @@ public class UserMaterialServiceImpl implements UserMaterialService {
    */
   @Autowired
   public UserMaterialServiceImpl(
-      UserMaterialRepository userMaterialRepository, UserMaterialMapper userMaterialMapper) {
+      UserMaterialRepository userMaterialRepository,
+      UserMaterialMapper userMaterialMapper,
+      UserRepository userRepository) {
     this.userMaterialRepository = userMaterialRepository;
     this.userMaterialMapper = userMaterialMapper;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -47,5 +54,43 @@ public class UserMaterialServiceImpl implements UserMaterialService {
     }
 
     return listUserMaterials.stream().map(userMaterialMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a list of user material from the owner's user and available
+   *
+   * @param userId the user identifier
+   * @return a list of user material from user ID and available true
+   */
+  @Override
+  public List<UserMaterialDTO> findAllUserMaterialIsActivated(long userId) {
+    List<UserMaterial> userMaterialListAvailable =
+        userMaterialRepository.findAllUserMaterialIsActivated(userId);
+
+    userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+    if (userMaterialListAvailable.isEmpty()) {
+      throw new UserMaterialException("The list with user material is empty");
+    }
+    return userMaterialListAvailable.stream().map(userMaterialMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a list of user material from the owner's user and is not available
+   *
+   * @param userId the user identifier
+   * @return a list of user material from user ID and available is false
+   */
+  @Override
+  public List<UserMaterialDTO> findAllUserMaterialIsDeactivated(long userId) {
+    List<UserMaterial> userMaterialListNotAvailable =
+        userMaterialRepository.findAllUserMaterialIsDeactivated(userId);
+
+    userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+    if (userMaterialListNotAvailable.isEmpty()) {
+      throw new UserMaterialException("The list with user material is empty");
+    }
+    return userMaterialListNotAvailable.stream().map(userMaterialMapper::toListDto).toList();
   }
 }

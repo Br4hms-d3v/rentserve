@@ -1,7 +1,10 @@
 package be.brahms.TFE_RentServe.repositories;
 
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +12,23 @@ import org.springframework.stereotype.Repository;
  * JpaRepository
  */
 @Repository
-public interface UserMaterialRepository extends JpaRepository<UserMaterial, Long> {}
+public interface UserMaterialRepository extends JpaRepository<UserMaterial, Long> {
+
+  /**
+   * Find all user material from user ID and is available
+   *
+   * @param userId the identifier user ID
+   * @return a list of user material by user id and available
+   */
+  @Query("SELECT um FROM UserMaterial um WHERE um.user.id = :userId AND um.isAvailable = true")
+  List<UserMaterial> findAllUserMaterialIsActivated(@Param("userId") long userId);
+
+  /**
+   * Find all user material from user ID and is not available
+   *
+   * @param userId the identifier user ID
+   * @return a list of user material by user id and is not available
+   */
+  @Query("SELECT um FROM UserMaterial um WHERE um.user.id = :userId AND um.isAvailable = false")
+  List<UserMaterial> findAllUserMaterialIsDeactivated(@Param("userId") long userId);
+}
