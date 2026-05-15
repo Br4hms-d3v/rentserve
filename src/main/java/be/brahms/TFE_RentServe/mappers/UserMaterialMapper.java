@@ -37,11 +37,16 @@ public interface UserMaterialMapper {
                         .findFirst()
                         .orElse("imageByDefault.jpg");
 
+        // Get the name from material
+        MaterialNameDTO nameMaterial = new MaterialNameDTO(userMaterial.getMaterial().getNameMaterial());
+
         return new UserMaterialDTO(
                 userMaterial.getId(),
+                nameMaterial,
                 userMaterial.getPriceHourMaterial(),
                 userMaterial.isAvailable(),
-                firstPicture);
+                firstPicture
+        );
     }
 
     /**
