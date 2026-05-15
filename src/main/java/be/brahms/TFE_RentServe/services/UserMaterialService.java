@@ -1,5 +1,6 @@
 package be.brahms.TFE_RentServe.services;
 
+import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import java.util.List;
 
@@ -31,4 +32,12 @@ public interface UserMaterialService {
    * @return a list of user material from user and is not available
    */
   List<UserMaterialDTO> findAllUserMaterialIsDeactivated(long userId);
+
+  /**
+   * This method get a list of user material by ID
+   *
+   * @param id the identifier of user material
+   * @return a detail about the user material
+   */
+  UserMaterialByIdDTO findUserMaterialById(long id);
 }

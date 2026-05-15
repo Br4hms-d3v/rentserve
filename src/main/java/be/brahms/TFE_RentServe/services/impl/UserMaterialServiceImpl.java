@@ -3,15 +3,18 @@ package be.brahms.TFE_RentServe.services.impl;
 import be.brahms.TFE_RentServe.exceptions.user.UserNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialEmptyException;
 import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialException;
+import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialNotFoundException;
 import be.brahms.TFE_RentServe.mappers.UserMaterialMapper;
+import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
 import be.brahms.TFE_RentServe.repositories.UserMaterialRepository;
 import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserMaterialService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Service implementation for managing UserMaterial. Uses UserMaterialRepository to perform database
@@ -92,5 +95,18 @@ public class UserMaterialServiceImpl implements UserMaterialService {
       throw new UserMaterialException("The list with user material is empty");
     }
     return userMaterialListNotAvailable.stream().map(userMaterialMapper::toListDto).toList();
+  }
+
+  /**
+   * Get a user material by id
+   *
+   * @param id the identifier of user material
+   * @return a detail user material
+   */
+  @Override
+  public UserMaterialByIdDTO findUserMaterialById(long id) {
+    UserMaterial userMaterial = userMaterialRepository.findById(id).orElseThrow(UserMaterialNotFoundException::new);
+
+    return userMaterialMapper.toIdDto(userMaterial);
   }
 }
