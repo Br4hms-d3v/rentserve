@@ -109,4 +109,25 @@ public class UserMaterialServiceImpl implements UserMaterialService {
 
     return userMaterialMapper.toIdDto(userMaterial);
   }
+
+  /**
+   * Get a list of user material by user ID
+   *
+   * @param id the identifier of user
+   * @return get a list of user material grouped by user ID
+   */
+  @Override
+  public List<UserMaterialDTO> findAllUserMaterialByUserId(long id) {
+    List<UserMaterial> listUserMaterialByUser = userMaterialRepository.findUserMaterialByUserId(id);
+
+    if( userRepository.findById(id).isEmpty()) {
+      throw new UserNotFoundException();
+    }
+
+    if( listUserMaterialByUser.isEmpty()) {
+      throw new UserMaterialEmptyException();
+    }
+
+    return listUserMaterialByUser.stream().map(userMaterialMapper::toListDto).toList();
+  }
 }

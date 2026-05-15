@@ -40,4 +40,12 @@ public interface UserMaterialService {
    * @return a detail about the user material
    */
   UserMaterialByIdDTO findUserMaterialById(long id);
+
+  /**
+   * This method get a list of user material by User ID
+   *
+   * @param userId the identifier of user
+   * @return a list of users material grouped by user id
+   */
+  List<UserMaterialDTO> findAllUserMaterialByUserId(long userId);
 }

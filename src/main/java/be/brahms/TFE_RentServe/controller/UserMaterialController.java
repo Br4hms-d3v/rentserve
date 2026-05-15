@@ -111,4 +111,18 @@ public class UserMaterialController {
         UserMaterialByIdDTO userMaterialByIdDTO = userMaterialService.findUserMaterialById(id);
         return ResponseEntity.ok().body(userMaterialAssembler.toIdModel(userMaterialByIdDTO));
     }
+
+    /**
+     * Get a list of user material grouped by User
+     *
+     * @param id the identifier from User
+     * @return a list of user material by user id
+     */
+    @GetMapping("user/{id}")
+    public ResponseEntity<CollectionModel<UserMaterialDTO>> getUserMaterialByUserId(@PathVariable long id) {
+        List<UserMaterialDTO> userMaterialUserId = userMaterialService.findAllUserMaterialByUserId(id);
+        CollectionModel<UserMaterialDTO> userMaterialDTOCollectionModel =
+                userMaterialAssembler.toCollectionModel(userMaterialUserId);
+        return ResponseEntity.ok().body(userMaterialDTOCollectionModel);
+    }
 }
