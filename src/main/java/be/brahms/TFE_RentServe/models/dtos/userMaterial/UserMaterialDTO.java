@@ -1,7 +1,6 @@
 package be.brahms.TFE_RentServe.models.dtos.userMaterial;
 
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialNameDTO;
-
 import java.math.BigDecimal;
 
 /**
@@ -15,4 +14,8 @@ import java.math.BigDecimal;
  * @param picture the first picture of material
  */
 public record UserMaterialDTO(
-        Long id, MaterialNameDTO nameMaterial, BigDecimal priceHourMaterial, Boolean isAvailable, String picture) {}
+    Long id,
+    MaterialNameDTO nameMaterial,
+    BigDecimal priceHourMaterial,
+    Boolean isAvailable,
+    String picture) {}

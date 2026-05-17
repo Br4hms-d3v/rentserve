@@ -40,5 +40,4 @@ public interface UserMaterialRepository extends JpaRepository<UserMaterial, Long
    */
   @Query("SELECT um FROM UserMaterial um WHERE um.user.id = :userId AND um.isAvailable = true ")
   List<UserMaterial> findUserMaterialByUserId(@Param("userId") long userId);
-
 }

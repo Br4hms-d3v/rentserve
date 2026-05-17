@@ -3,7 +3,6 @@ package be.brahms.TFE_RentServe.models.dtos.userMaterial;
 import be.brahms.TFE_RentServe.enums.State;
 import be.brahms.TFE_RentServe.models.dtos.material.MaterialNameDTO;
 import be.brahms.TFE_RentServe.models.dtos.user.UserPseudoDTO;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -20,12 +19,11 @@ import java.util.List;
  * @param state the name of state about the material
  */
 public record UserMaterialByIdDTO(
-        Long id,
-        String descriptionMaterial,
-        BigDecimal priceHourMaterial,
-        Boolean isAvailable,
-        List<String> pictures,
-        UserPseudoDTO user,
-        MaterialNameDTO material,
-        State state
-) {}
+    Long id,
+    String descriptionMaterial,
+    BigDecimal priceHourMaterial,
+    Boolean isAvailable,
+    List<String> pictures,
+    UserPseudoDTO user,
+    MaterialNameDTO material,
+    State state) {}

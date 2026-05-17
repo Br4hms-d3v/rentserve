@@ -1,5 +1,6 @@
 package be.brahms.TFE_RentServe.services.impl;
 
+import be.brahms.TFE_RentServe.exceptions.material.MaterialNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.user.UserNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialEmptyException;
 import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialException;
@@ -7,14 +8,24 @@ import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialNotFoundExcep
 import be.brahms.TFE_RentServe.mappers.UserMaterialMapper;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
+import be.brahms.TFE_RentServe.models.entities.Material;
+import be.brahms.TFE_RentServe.models.entities.Picture;
+import be.brahms.TFE_RentServe.models.entities.User;
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import be.brahms.TFE_RentServe.repositories.MaterialRepository;
+import be.brahms.TFE_RentServe.repositories.PictureRepository;
 import be.brahms.TFE_RentServe.repositories.UserMaterialRepository;
 import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserMaterialService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 /**
  * Service implementation for managing UserMaterial. Uses UserMaterialRepository to perform database
@@ -26,21 +37,30 @@ public class UserMaterialServiceImpl implements UserMaterialService {
   private final UserMaterialRepository userMaterialRepository;
   private final UserMaterialMapper userMaterialMapper;
   private final UserRepository userRepository;
+  private final MaterialRepository materialRepository;
+  private final PictureRepository pictureRepository;
 
   /**
    * Constructor with parameters
    *
    * @param userMaterialRepository the userMaterialRepo to access userMaterial data
    * @param userMaterialMapper map between from userMaterial to entity or dto to entity
+   * @param userRepository the userRepo to access User data
+   * @param materialRepository the materialRepo to access Material data
+   * @param pictureRepository the pictureRepo to access Picture data
    */
   @Autowired
   public UserMaterialServiceImpl(
       UserMaterialRepository userMaterialRepository,
       UserMaterialMapper userMaterialMapper,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      MaterialRepository materialRepository,
+      PictureRepository pictureRepository) {
     this.userMaterialRepository = userMaterialRepository;
     this.userMaterialMapper = userMaterialMapper;
     this.userRepository = userRepository;
+    this.materialRepository = materialRepository;
+    this.pictureRepository = pictureRepository;
   }
 
   /**
@@ -105,7 +125,8 @@ public class UserMaterialServiceImpl implements UserMaterialService {
    */
   @Override
   public UserMaterialByIdDTO findUserMaterialById(long id) {
-    UserMaterial userMaterial = userMaterialRepository.findById(id).orElseThrow(UserMaterialNotFoundException::new);
+    UserMaterial userMaterial =
+        userMaterialRepository.findById(id).orElseThrow(UserMaterialNotFoundException::new);
 
     return userMaterialMapper.toIdDto(userMaterial);
   }
@@ -120,14 +141,64 @@ public class UserMaterialServiceImpl implements UserMaterialService {
   public List<UserMaterialDTO> findAllUserMaterialByUserId(long id) {
     List<UserMaterial> listUserMaterialByUser = userMaterialRepository.findUserMaterialByUserId(id);
 
-    if( userRepository.findById(id).isEmpty()) {
+    if (userRepository.findById(id).isEmpty()) {
       throw new UserNotFoundException();
     }
 
-    if( listUserMaterialByUser.isEmpty()) {
+    if (listUserMaterialByUser.isEmpty()) {
       throw new UserMaterialEmptyException();
     }
 
     return listUserMaterialByUser.stream().map(userMaterialMapper::toListDto).toList();
+  }
+
+  /**
+   * Create a new UserMaterial. It's Check if the Material exist. Must be connected to create a new
+   * userMaterial
+   *
+   * @param form the form to create a new user Material
+   * @return a new User material
+   */
+  @Override
+  public UserMaterialDTO createUserMaterial(UserMaterialCreateForm form) {
+
+    Material materialById =
+        materialRepository.findById(form.materialId()).orElseThrow(MaterialNotFoundException::new);
+
+    UserMaterial userMaterial = userMaterialMapper.fromUserMaterialForm(form);
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null && authentication.isAuthenticated()) {
+      Object principal = authentication.getPrincipal();
+
+      if (principal instanceof UserDetails userDetails) {
+        String pseudo = userDetails.getUsername();
+
+        User user = userRepository.findByPseudo(pseudo).orElseThrow(UserNotFoundException::new);
+        userMaterial.setUser(user);
+      }
+
+      userMaterial.setMaterial(materialById);
+      userMaterial.setDescriptionMaterial(form.descriptionMaterial());
+      userMaterial.setPriceHourMaterial(form.priceHourMaterial());
+      userMaterial.setStateMaterial(form.state());
+      userMaterial.setAvailable(form.isAvailable());
+
+      Set<Picture> picturesSource = userMaterial.getPictures();
+
+      if (picturesSource.isEmpty()) {
+        throw new UserMaterialException("Il n'y a aucune photo");
+      }
+
+      Set<Picture> pictures =
+          picturesSource.stream().map(pictureRepository::save).collect(Collectors.toSet());
+      ;
+
+      userMaterial.setPictures(pictures);
+
+      userMaterialRepository.save(userMaterial);
+    }
+    return userMaterialMapper.toDto(userMaterial);
   }
 }

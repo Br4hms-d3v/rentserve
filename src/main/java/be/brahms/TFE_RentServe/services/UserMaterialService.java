@@ -2,6 +2,8 @@ package be.brahms.TFE_RentServe.services;
 
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**
@@ -48,4 +50,12 @@ public interface UserMaterialService {
    * @return a list of users material grouped by user id
    */
   List<UserMaterialDTO> findAllUserMaterialByUserId(long userId);
+
+  /**
+   * This method saves a new UserMaterial
+   *
+   * @param form the form to create a new user Material
+   * @return the saved user material
+   */
+  UserMaterialDTO createUserMaterial(@Valid UserMaterialCreateForm form);
 }

@@ -561,20 +561,20 @@ public class GlobalExceptionHandler {
   /**
    * Handles UserMaterialNotFoundException and sends a 404 NOT_FOUND error.
    *
-   * <p>This method is called automatically when the user material not found. It creates an
-   * ApiError and sends it to the frontend.
+   * <p>This method is called automatically when the user material not found. It creates an ApiError
+   * and sends it to the frontend.
    *
    * @param except The exception that was thrown (UserMaterialNotFoundException).
    * @return A response with an apiError and HTTP status 404 (NOT_FOUND).
    */
   @ExceptionHandler(UserMaterialNotFoundException.class)
   public ResponseEntity<ApiError> handleUserMaterialNotFoundException(
-          UserMaterialNotFoundException except) {
+      UserMaterialNotFoundException except) {
     ApiError apiError =
-            ApiError.of(
-                    HttpStatus.NOT_FOUND.value(),
-                    HttpStatus.NOT_FOUND.getReasonPhrase(),
-                    except.getMessage());
+        ApiError.of(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            except.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
   }
 
