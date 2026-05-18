@@ -139,6 +139,13 @@ public class UserMaterialController {
     return ResponseEntity.ok().body(userMaterialAssembler.toModel(newUserMaterial));
   }
 
+  /**
+   * Update the useMaterial
+   *
+   * @param id the identifier of user material
+   * @param form the form to update the user material
+   * @return a user material updated
+   */
   @PutMapping("{id}/edit")
   public ResponseEntity<EntityModel<UserMaterialDTO>> updateUserMaterial(
       @PathVariable long id, @RequestBody UserMaterialUpdateForm form) {
