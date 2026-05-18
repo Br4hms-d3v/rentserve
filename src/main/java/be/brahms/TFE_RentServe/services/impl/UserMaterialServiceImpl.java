@@ -19,6 +19,7 @@ import be.brahms.TFE_RentServe.repositories.PictureRepository;
 import be.brahms.TFE_RentServe.repositories.UserMaterialRepository;
 import be.brahms.TFE_RentServe.repositories.UserRepository;
 import be.brahms.TFE_RentServe.services.UserMaterialService;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -238,5 +239,35 @@ public class UserMaterialServiceImpl implements UserMaterialService {
     userMaterialRepository.save(userMaterial);
 
     return userMaterialMapper.toDto(userMaterial);
+  }
+
+  /**
+   * Delete a user material remove all identifier in relationship with picture_user_material remove
+   * all picture from picture database
+   *
+   * @param id the identifier of user material
+   */
+  @Override
+  public void deleteUserMaterialById(long id) {
+    UserMaterial userMaterial =
+        userMaterialRepository.findById(id).orElseThrow(UserMaterialNotFoundException::new);
+
+    // Copy the pictures before to break the relationShip UserMaterial to Picture
+    Set<Picture> pictures = new HashSet<>(userMaterial.getPictures());
+
+    // Break the relationship and clears all pictures
+    userMaterial.getPictures().clear();
+    userMaterialRepository.save(userMaterial);
+
+    // Delete user material
+    userMaterialRepository.delete(userMaterial);
+
+    // Remove picture like orphan remove
+    for (Picture p : pictures) {
+      boolean stillUsed = userMaterialRepository.existsByPictures_Id(p.getId());
+      if (!stillUsed) {
+        pictureRepository.delete(p);
+      }
+    }
   }
 }

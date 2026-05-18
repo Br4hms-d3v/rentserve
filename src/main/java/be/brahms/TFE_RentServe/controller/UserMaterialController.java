@@ -152,4 +152,16 @@ public class UserMaterialController {
     UserMaterialDTO newUserMaterial = userMaterialService.updateUserMaterial(id, form);
     return ResponseEntity.ok().body(userMaterialAssembler.toModel(newUserMaterial));
   }
+
+  /**
+   * Delete the userMaterial
+   *
+   * @param id the identifier of user material
+   * @return a message to confirm delete
+   */
+  @DeleteMapping("{id}/delete")
+  public ResponseEntity<String> deleteUserMaterial(@PathVariable long id) {
+    userMaterialService.deleteUserMaterialById(id);
+    return ResponseEntity.ok().body("The user material has been deleted");
+  }
 }

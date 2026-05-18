@@ -40,4 +40,12 @@ public interface UserMaterialRepository extends JpaRepository<UserMaterial, Long
    */
   @Query("SELECT um FROM UserMaterial um WHERE um.user.id = :userId AND um.isAvailable = true ")
   List<UserMaterial> findUserMaterialByUserId(@Param("userId") long userId);
+
+  /**
+   * Get a boolean true or false if the picture exists or not
+   *
+   * @param id the identifier of picture
+   * @return a boolean true or false
+   */
+  boolean existsByPictures_Id(long id);
 }

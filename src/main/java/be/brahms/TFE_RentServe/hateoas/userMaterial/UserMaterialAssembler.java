@@ -43,7 +43,9 @@ public class UserMaterialAssembler
         linkTo(methodOn(UserMaterialController.class).createUserMaterial(null))
             .withRel("Create a new user material"),
         linkTo(methodOn(UserMaterialController.class).updateUserMaterial(userMaterial.id(), null))
-            .withRel("Update user material"));
+            .withRel("Update user material"),
+        linkTo(methodOn(UserMaterialController.class).deleteUserMaterial(userMaterial.id()))
+            .withRel("Delete user material"));
   }
 
   /**
@@ -75,6 +77,8 @@ public class UserMaterialAssembler
         linkTo(
                 methodOn(UserMaterialController.class)
                     .updateUserMaterial(userMaterialByIdDTO.id(), null))
-            .withRel("Update user material"));
+            .withRel("Update user material"),
+        linkTo(methodOn(UserMaterialController.class).deleteUserMaterial(userMaterialByIdDTO.id()))
+            .withRel("Delete user material"));
   }
 }

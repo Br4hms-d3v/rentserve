@@ -68,4 +68,11 @@ public interface UserMaterialService {
    * @return an updated user material
    */
   UserMaterialDTO updateUserMaterial(long id, @Valid UserMaterialUpdateForm form);
+
+  /**
+   * This method delete a userMaterial
+   *
+   * @param id the identifier of user material
+   */
+  void deleteUserMaterialById(long id);
 }
