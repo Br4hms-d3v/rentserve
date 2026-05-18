@@ -4,6 +4,7 @@ import be.brahms.TFE_RentServe.hateoas.userMaterial.UserMaterialAssembler;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialUpdateForm;
 import be.brahms.TFE_RentServe.services.UserMaterialService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -135,6 +136,13 @@ public class UserMaterialController {
   public ResponseEntity<EntityModel<UserMaterialDTO>> createUserMaterial(
       @RequestBody @Valid UserMaterialCreateForm form) {
     UserMaterialDTO newUserMaterial = userMaterialService.createUserMaterial(form);
+    return ResponseEntity.ok().body(userMaterialAssembler.toModel(newUserMaterial));
+  }
+
+  @PutMapping("{id}/edit")
+  public ResponseEntity<EntityModel<UserMaterialDTO>> updateUserMaterial(
+      @PathVariable long id, @RequestBody UserMaterialUpdateForm form) {
+    UserMaterialDTO newUserMaterial = userMaterialService.updateUserMaterial(id, form);
     return ResponseEntity.ok().body(userMaterialAssembler.toModel(newUserMaterial));
   }
 }

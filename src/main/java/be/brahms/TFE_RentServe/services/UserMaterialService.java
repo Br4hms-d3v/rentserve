@@ -3,6 +3,7 @@ package be.brahms.TFE_RentServe.services;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialByIdDTO;
 import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialUpdateForm;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -58,4 +59,13 @@ public interface UserMaterialService {
    * @return the saved user material
    */
   UserMaterialDTO createUserMaterial(@Valid UserMaterialCreateForm form);
+
+  /**
+   * This method update the existing user material
+   *
+   * @param id the identifier of user material
+   * @param form the form to update the user material
+   * @return an updated user material
+   */
+  UserMaterialDTO updateUserMaterial(long id, @Valid UserMaterialUpdateForm form);
 }

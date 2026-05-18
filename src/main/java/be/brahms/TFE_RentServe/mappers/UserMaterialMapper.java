@@ -7,8 +7,10 @@ import be.brahms.TFE_RentServe.models.dtos.userMaterial.UserMaterialDTO;
 import be.brahms.TFE_RentServe.models.entities.Picture;
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
 import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialUpdateForm;
 import java.util.List;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -89,10 +91,10 @@ public interface UserMaterialMapper {
   // Form to Entity
 
   /**
-   * Convert a UserMaterialForm to a UserFavor entity. Used when creating a new user favor
+   * Convert a UserMaterialForm to a UserMaterial entity. Used when creating a new user material
    *
-   * @param form the user favor form
-   * @return the new user favor
+   * @param form the user material form
+   * @return the new user material
    */
   UserMaterial fromUserMaterialForm(UserMaterialCreateForm form);
 
@@ -114,4 +116,13 @@ public interface UserMaterialMapper {
 
     return picture;
   }
+
+  /**
+   * Convert a UserMaterialForm to a UserMaterial entity. Used when updated a user material
+   *
+   * @param form the user material update form
+   * @param userMaterial the user material entity
+   */
+  void fromUpdateUserMaterialForm(
+      UserMaterialUpdateForm form, @MappingTarget UserMaterial userMaterial);
 }

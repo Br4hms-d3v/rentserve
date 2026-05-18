@@ -13,6 +13,7 @@ import be.brahms.TFE_RentServe.models.entities.Picture;
 import be.brahms.TFE_RentServe.models.entities.User;
 import be.brahms.TFE_RentServe.models.entities.UserMaterial;
 import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialCreateForm;
+import be.brahms.TFE_RentServe.models.forms.userMaterial.UserMaterialUpdateForm;
 import be.brahms.TFE_RentServe.repositories.MaterialRepository;
 import be.brahms.TFE_RentServe.repositories.PictureRepository;
 import be.brahms.TFE_RentServe.repositories.UserMaterialRepository;
@@ -199,6 +200,43 @@ public class UserMaterialServiceImpl implements UserMaterialService {
 
       userMaterialRepository.save(userMaterial);
     }
+    return userMaterialMapper.toDto(userMaterial);
+  }
+
+  /**
+   * Update an userMaterial
+   *
+   * @param id the identifier of user material
+   * @param form the form to update the user material
+   * @return an updated user material
+   */
+  @Override
+  public UserMaterialDTO updateUserMaterial(long id, UserMaterialUpdateForm form) {
+
+    Material materialById =
+        materialRepository.findById(form.materialId()).orElseThrow(MaterialNotFoundException::new);
+
+    UserMaterial userMaterial =
+        userMaterialRepository.findById(id).orElseThrow(UserMaterialNotFoundException::new);
+
+    Long existingMaterialId = userMaterial.getMaterial().getId();
+    Long newMaterialId = form.materialId();
+
+    if (newMaterialId != null && !newMaterialId.equals(existingMaterialId)) {
+      Material newMaterial =
+          materialRepository.findById(newMaterialId).orElseThrow(MaterialNotFoundException::new);
+      userMaterial.setMaterial(newMaterial);
+    }
+
+    userMaterial.setDescriptionMaterial(form.descriptionMaterial());
+    userMaterial.setPriceHourMaterial(form.priceHourMaterial());
+    userMaterial.setAvailable(form.isAvailable());
+    userMaterial.setStateMaterial(form.state());
+
+    userMaterialMapper.fromUpdateUserMaterialForm(form, userMaterial);
+
+    userMaterialRepository.save(userMaterial);
+
     return userMaterialMapper.toDto(userMaterial);
   }
 }
