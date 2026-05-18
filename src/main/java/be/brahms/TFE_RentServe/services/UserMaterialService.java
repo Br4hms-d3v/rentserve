@@ -75,4 +75,12 @@ public interface UserMaterialService {
    * @param id the identifier of user material
    */
   void deleteUserMaterialById(long id);
+
+  /**
+   * This method get a list of user materials by Material ID
+   *
+   * @param materialId the identifier material
+   * @return a list of users materials grouped by material id
+   */
+  List<UserMaterialDTO> findAllUserMaterialsByMaterialId(long materialId);
 }

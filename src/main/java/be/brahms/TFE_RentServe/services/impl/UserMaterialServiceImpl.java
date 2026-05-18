@@ -270,4 +270,19 @@ public class UserMaterialServiceImpl implements UserMaterialService {
       }
     }
   }
+
+  @Override
+  public List<UserMaterialDTO> findAllUserMaterialsByMaterialId(long materialId) {
+    List<UserMaterial> listUserMaterials = userMaterialRepository.findAllUserMaterialsByMaterialId(materialId);
+
+    if( !userMaterialRepository.existsById(materialId) ) {
+      throw new UserMaterialNotFoundException();
+    }
+
+    if(listUserMaterials.isEmpty()) {
+      throw new UserMaterialNotFoundException();
+    }
+
+    return listUserMaterials.stream().map(userMaterialMapper::toListDto).toList();
+  }
 }
