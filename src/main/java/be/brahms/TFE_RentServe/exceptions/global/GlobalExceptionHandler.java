@@ -18,6 +18,9 @@ import be.brahms.TFE_RentServe.exceptions.user.*;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavorNotFoundException;
 import be.brahms.TFE_RentServe.exceptions.userFavor.UserFavourEmptyException;
+import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialEmptyException;
+import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialException;
+import be.brahms.TFE_RentServe.exceptions.userMaterial.UserMaterialNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -509,6 +512,64 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(UserFavourEmptyException.class)
   public ResponseEntity<ApiError> handleUserFavourEmptyException(UserFavourEmptyException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+  }
+
+  // User Materials
+
+  /**
+   * Handles errors specific to user materials operations.
+   *
+   * @param except the UserMaterialException containing the error message
+   * @return a response with the error message and HTTP 400 status
+   */
+  @ExceptionHandler(UserMaterialException.class)
+  public ResponseEntity<ApiError> handleUserMaterialException(UserMaterialException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Handles UserMaterialEmptyException and sends a 404 NOT_FOUND error.
+   *
+   * <p>This method is called automatically when the user material is empty. It creates an ApiError
+   * and sends it to the frontend.
+   *
+   * @param except The exception that was thrown (UserMaterialEmptyException).
+   * @return A response with an apiError and HTTP status 404 (NOT_FOUND).
+   */
+  @ExceptionHandler(UserMaterialEmptyException.class)
+  public ResponseEntity<ApiError> handleUserMaterialEmptyException(
+      UserMaterialEmptyException except) {
+    ApiError apiError =
+        ApiError.of(
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            except.getMessage());
+    return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+  }
+
+  /**
+   * Handles UserMaterialNotFoundException and sends a 404 NOT_FOUND error.
+   *
+   * <p>This method is called automatically when the user material not found. It creates an ApiError
+   * and sends it to the frontend.
+   *
+   * @param except The exception that was thrown (UserMaterialNotFoundException).
+   * @return A response with an apiError and HTTP status 404 (NOT_FOUND).
+   */
+  @ExceptionHandler(UserMaterialNotFoundException.class)
+  public ResponseEntity<ApiError> handleUserMaterialNotFoundException(
+      UserMaterialNotFoundException except) {
     ApiError apiError =
         ApiError.of(
             HttpStatus.NOT_FOUND.value(),
