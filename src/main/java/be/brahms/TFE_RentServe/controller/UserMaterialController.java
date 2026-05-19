@@ -165,17 +165,19 @@ public class UserMaterialController {
     return ResponseEntity.ok().body("The user material has been deleted");
   }
 
-    /**
-     * Get a list of all users materials grouped by ID material
-     *
-     * @param materialId the identifier material
-     * @return a list of user materials by Material ID
-     */
-    @GetMapping("list/{materialId}")
-    public ResponseEntity<CollectionModel<UserMaterialDTO>> findAllUserMaterialsByMaterialId(@PathVariable long materialId){
-      List<UserMaterialDTO> userMaterialDTOs = userMaterialService.findAllUserMaterialsByMaterialId(materialId);
-      CollectionModel<UserMaterialDTO> userMaterialDTOCollectionModel =
-              userMaterialAssembler.toCollectionModel(userMaterialDTOs);
-        return ResponseEntity.ok().body(userMaterialDTOCollectionModel);
-    }
+  /**
+   * Get a list of all users materials grouped by ID material
+   *
+   * @param materialId the identifier material
+   * @return a list of user materials by Material ID
+   */
+  @GetMapping("list/{materialId}")
+  public ResponseEntity<CollectionModel<UserMaterialDTO>> findAllUserMaterialsByMaterialId(
+      @PathVariable long materialId) {
+    List<UserMaterialDTO> userMaterialDTOs =
+        userMaterialService.findAllUserMaterialsByMaterialId(materialId);
+    CollectionModel<UserMaterialDTO> userMaterialDTOCollectionModel =
+        userMaterialAssembler.toCollectionModel(userMaterialDTOs);
+    return ResponseEntity.ok().body(userMaterialDTOCollectionModel);
+  }
 }

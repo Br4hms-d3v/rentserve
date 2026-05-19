@@ -271,15 +271,22 @@ public class UserMaterialServiceImpl implements UserMaterialService {
     }
   }
 
+  /**
+   * Get a list of all users materials grouped by ID material
+   *
+   * @param materialId the identifier material
+   * @return a list of user material by material ID
+   */
   @Override
   public List<UserMaterialDTO> findAllUserMaterialsByMaterialId(long materialId) {
-    List<UserMaterial> listUserMaterials = userMaterialRepository.findAllUserMaterialsByMaterialId(materialId);
+    List<UserMaterial> listUserMaterials =
+        userMaterialRepository.findAllUserMaterialsByMaterialId(materialId);
 
-    if( !userMaterialRepository.existsById(materialId) ) {
+    if (!userMaterialRepository.existsById(materialId)) {
       throw new UserMaterialNotFoundException();
     }
 
-    if(listUserMaterials.isEmpty()) {
+    if (listUserMaterials.isEmpty()) {
       throw new UserMaterialNotFoundException();
     }
 
