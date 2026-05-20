@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -57,6 +58,7 @@ public class UserMaterialController {
    * @return a list of users material
    */
   @GetMapping("list")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserMaterialDTO>> getAllUserMaterials() {
     List<UserMaterialDTO> userMaterials = userMaterialService.findAllUserMaterials();
     CollectionModel<UserMaterialDTO> userMaterialCollectionModel =
@@ -71,6 +73,7 @@ public class UserMaterialController {
    * @return a list of user material activated
    */
   @GetMapping("user/{id}/activated")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR')")
   public ResponseEntity<CollectionModel<UserMaterialDTO>> getActiveUserMaterials(
       @PathVariable long id) {
     List<UserMaterialDTO> userMaterialActivated =
@@ -88,6 +91,7 @@ public class UserMaterialController {
    * @return a list of user material deactivated
    */
   @GetMapping("user/{id}/deactivated")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR')")
   public ResponseEntity<CollectionModel<UserMaterialDTO>> getDeactivateUserMaterials(
       @PathVariable long id) {
     List<UserMaterialDTO> userMaterialDeactivated =
@@ -105,6 +109,7 @@ public class UserMaterialController {
    * @return a detail about the user material
    */
   @GetMapping("{id}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserMaterialByIdDTO>> getUserMaterialById(
       @PathVariable long id) {
     UserMaterialByIdDTO userMaterialByIdDTO = userMaterialService.findUserMaterialById(id);
@@ -118,6 +123,7 @@ public class UserMaterialController {
    * @return a list of user material by user id
    */
   @GetMapping("user/{id}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserMaterialDTO>> getUserMaterialByUserId(
       @PathVariable long id) {
     List<UserMaterialDTO> userMaterialUserId = userMaterialService.findAllUserMaterialByUserId(id);
@@ -133,6 +139,7 @@ public class UserMaterialController {
    * @return a new User material
    */
   @PostMapping("new")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserMaterialDTO>> createUserMaterial(
       @RequestBody @Valid UserMaterialCreateForm form) {
     UserMaterialDTO newUserMaterial = userMaterialService.createUserMaterial(form);
@@ -147,6 +154,7 @@ public class UserMaterialController {
    * @return a user material updated
    */
   @PutMapping("{id}/edit")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserMaterialDTO>> updateUserMaterial(
       @PathVariable long id, @RequestBody UserMaterialUpdateForm form) {
     UserMaterialDTO newUserMaterial = userMaterialService.updateUserMaterial(id, form);
@@ -160,6 +168,7 @@ public class UserMaterialController {
    * @return a message to confirm delete
    */
   @DeleteMapping("{id}/delete")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<String> deleteUserMaterial(@PathVariable long id) {
     userMaterialService.deleteUserMaterialById(id);
     return ResponseEntity.ok().body("The user material has been deleted");
@@ -172,6 +181,7 @@ public class UserMaterialController {
    * @return a list of user materials by Material ID
    */
   @GetMapping("list/{materialId}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserMaterialDTO>> findAllUserMaterialsByMaterialId(
       @PathVariable long materialId) {
     List<UserMaterialDTO> userMaterialDTOs =
