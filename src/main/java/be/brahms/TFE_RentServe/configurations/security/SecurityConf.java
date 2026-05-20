@@ -82,6 +82,13 @@ public class SecurityConf {
                     .hasAnyRole("MODERATOR", "ADMIN")
                     .requestMatchers("/api/material/**")
                     .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
+                    // UserFavor
+                    .requestMatchers("/api/user-favor/user/{id}/activated")
+                    .hasAnyRole("MEMBER", "MODERATOR")
+                    .requestMatchers("/api/user-favor/user/{id}/deactivated")
+                    .hasAnyRole("MEMBER", "MODERATOR")
+                    .requestMatchers("/api/user-favor/**")
+                    .hasAnyRole("MEMBER", "MODERATOR", "ADMIN")
                     .anyRequest()
                     .permitAll())
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

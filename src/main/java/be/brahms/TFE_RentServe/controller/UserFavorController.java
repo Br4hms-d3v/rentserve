@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -56,6 +57,7 @@ public class UserFavorController {
    * @return a list of users favour
    */
   @GetMapping("list")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getAllUserFavour() {
     List<UserFavorDTO> userFavour = userFavorService.findAllUserFavour();
     CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
@@ -70,6 +72,7 @@ public class UserFavorController {
    * @return a list of users favour grouped by favor ID
    */
   @GetMapping("list/{favorId}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getUserFavourByFavorId(
       @PathVariable long favorId) {
     List<UserFavorDTO> userFavor = userFavorService.findAllUserFavourByFavorId(favorId);
@@ -85,6 +88,7 @@ public class UserFavorController {
    * @return a detail about the user favor
    */
   @GetMapping("{id}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserFavorByIdDTO>> getUserFavorById(@PathVariable long id) {
     UserFavorByIdDTO userFavorId = userFavorService.findUserFavorById(id);
     return ResponseEntity.ok().body(userFavorAssembler.toIdModel(userFavorId));
@@ -97,6 +101,7 @@ public class UserFavorController {
    * @return a list of user favor by user id
    */
   @GetMapping("user/{id}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getUserFavorByUserId(@PathVariable long id) {
     List<UserFavorDTO> userFavorByUserId = userFavorService.findAllUserFavourByUserId(id);
     CollectionModel<UserFavorDTO> userFavorDTOCollectionModel =
@@ -111,6 +116,7 @@ public class UserFavorController {
    * @return a list of user favor activated
    */
   @GetMapping("user/{id}/activated")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR')")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getActivatedUserFavour(
       @PathVariable long id) {
     List<UserFavorDTO> userFavorIsActivated = userFavorService.findAllUserFavourIsActivated(id);
@@ -126,6 +132,7 @@ public class UserFavorController {
    * @return a list of user favor deactivated
    */
   @GetMapping("user/{id}/deactivated")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR')")
   public ResponseEntity<CollectionModel<UserFavorDTO>> getDeactivatedUserFavour(
       @PathVariable long id) {
     List<UserFavorDTO> userFavorIsDeactivated = userFavorService.findAllUserFavourIsDeactivated(id);
@@ -141,6 +148,7 @@ public class UserFavorController {
    * @return a new User favor
    */
   @PostMapping("{new}")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserFavorDTO>> createUserFavor(
       @RequestBody @Valid UserFavorCreateForm form) {
     UserFavorDTO newUserFavor = userFavorService.createUserFavor(form);
@@ -155,6 +163,7 @@ public class UserFavorController {
    * @return a user favor updated
    */
   @PutMapping("{id}/edit")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<EntityModel<UserFavorDTO>> updateUserFavor(
       @PathVariable long id, @RequestBody UpdateUserFavorForm form) {
     UserFavorDTO userFavor = userFavorService.updateUserFavor(id, form);
@@ -168,6 +177,7 @@ public class UserFavorController {
    * @return a message to confirm delete
    */
   @DeleteMapping("{id}/delete")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<String> deleteUserFavorById(@PathVariable long id) {
     userFavorService.deleteUserFavor(id);
     return ResponseEntity.ok().body("The userFavor has been deleted with success");
