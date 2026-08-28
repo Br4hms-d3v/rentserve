@@ -1,7 +1,6 @@
 package be.brahms.TFE_RentServe.configurations.cors;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +36,9 @@ public class CorsConfig implements WebMvcConfigurer {
     registry
         .addMapping("/**") // for all routes
         .allowedOrigins("http://localhost:4200") // Accept only localhost:4200
-        .allowedMethods("*") // Accept all methode GET, Put, Patch, Delete
+        .allowedMethods(
+            "GET", "POST", "PUT", "PATCH", "DELETE",
+            "OPTIONS") // Accept all methode GET, Put, Patch, Delete
         .allowedHeaders("*") // Accept all Headers
         .exposedHeaders("Authorization") // Important to send the JWT from backend to frontend
         .allowCredentials(true); // This is necessary to use sessions or cookies for authentication
@@ -53,8 +54,7 @@ public class CorsConfig implements WebMvcConfigurer {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOriginPatterns(List.of("http://localhost:4200"));
-    configuration.setAllowedMethods(
-        Arrays.asList("Get", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of("*"));
     configuration.setExposedHeaders(List.of("Authorization"));
     configuration.setAllowCredentials(true);
