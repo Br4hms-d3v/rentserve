@@ -153,6 +153,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
   }
 
+  /**
+   * This method display a list only categories from material
+   *
+   * @return the list of categories
+   * @throws CategoryException if the list of categories are empty
+   */
   @Override
   public List<CategoryDTO> listCategoriesForMaterial() {
     List<Category> listCategoriesForMaterial = categoryRepository.findAllCategoriesForMaterial();
@@ -162,5 +168,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     return categoryMapper.toListDto(listCategoriesForMaterial);
+  }
+
+  /**
+   * This method display a list only categories from service
+   *
+   * @return the list of categories
+   * @throws CategoryException if the list of categories are empty
+   */
+  @Override
+  public List<CategoryDTO> listCategoriesForFavor() {
+    List<Category> listCategoriesForFavor = categoryRepository.findAllCategoriesForFavor();
+
+    if (listCategoriesForFavor.isEmpty()) {
+      throw new CategoryException("La liste est vide");
+    }
+
+    return categoryMapper.toListDto(listCategoriesForFavor);
   }
 }

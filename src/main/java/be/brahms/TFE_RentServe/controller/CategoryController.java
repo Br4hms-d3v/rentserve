@@ -122,11 +122,35 @@ public class CategoryController {
     return ResponseEntity.ok().body("La catégorie a été supprimée avec succès.");
   }
 
-  // TODO Continue a faire la liste des materials et services
+  /**
+   * Get a list of categories .
+   * <p>
+   * This method returns a list of all categories based on material.
+   * Each category is converted to a CategoryDto (Data Transfer Object).
+   * Each CategoryDto is wrapped inside an EntityModel with HATEOAS links.
+   *
+   * @return ResponseEntity with a list of category models
+   */
   @GetMapping("material")
   @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
   public ResponseEntity<CollectionModel<CategoryDTO>> listCategoriesMaterials() {
     List<CategoryDTO> listCategoriesForMaterial = categoryService.listCategoriesForMaterial();
     return ResponseEntity.ok().body(CollectionModel.of(listCategoriesForMaterial));
+  }
+
+  /**
+   * Get a list of categories .
+   * <p>
+   * This method returns a list of all categories based on service.
+   * Each category is converted to a CategoryDto (Data Transfer Object).
+   * Each CategoryDto is wrapped inside an EntityModel with HATEOAS links.
+   *
+   * @return ResponseEntity with a list of category models
+   */
+  @GetMapping("favor")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
+  public ResponseEntity<CollectionModel<CategoryDTO>> listCategoriesFavour() {
+    List<CategoryDTO> listCategoriesForFavor = categoryService.listCategoriesForFavor();
+    return ResponseEntity.ok().body(CollectionModel.of(listCategoriesForFavor));
   }
 }

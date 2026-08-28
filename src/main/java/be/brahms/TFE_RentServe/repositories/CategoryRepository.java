@@ -43,4 +43,15 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
    */
   @Query("SELECT DISTINCT c FROM Category c JOIN c.materials m ORDER BY c.nameCategory ASC")
   List<Category> findAllCategoriesForMaterial();
+
+  /**
+   * Get all categories that have at least one Favor.
+   *
+   * <p>This method returns a list of categories. It only includes categories that are linked to
+   * Favour. The list is sorted by the category name (A to Z)
+   *
+   * @return a list of categories only for Favor
+   */
+  @Query("SELECT DISTINCT c FROM Category c JOIN c.favours m ORDER BY c.nameCategory ASC")
+  List<Category> findAllCategoriesForFavor();
 }

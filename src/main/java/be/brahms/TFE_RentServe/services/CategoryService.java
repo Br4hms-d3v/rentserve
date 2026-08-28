@@ -65,4 +65,11 @@ public interface CategoryService {
    * @return list of categories only for material
    */
   List<CategoryDTO> listCategoriesForMaterial();
+
+  /**
+   * List of all categories for only favor
+   *
+   * @return list of categories only for favor
+   */
+  List<CategoryDTO> listCategoriesForFavor();
 }
