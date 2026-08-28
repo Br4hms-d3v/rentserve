@@ -152,4 +152,15 @@ public class CategoryServiceImpl implements CategoryService {
           "Can't delete category because it is used by another database");
     }
   }
+
+  @Override
+  public List<CategoryDTO> listCategoriesForMaterial() {
+    List<Category> listCategoriesForMaterial = categoryRepository.findAllCategoriesForMaterial();
+
+    if (listCategoriesForMaterial.isEmpty()) {
+      throw new CategoryException("La liste est vide");
+    }
+
+    return categoryMapper.toListDto(listCategoriesForMaterial);
+  }
 }

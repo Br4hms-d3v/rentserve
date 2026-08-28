@@ -121,4 +121,12 @@ public class CategoryController {
     categoryService.deleteCategory(id);
     return ResponseEntity.ok().body("La catégorie a été supprimée avec succès.");
   }
+
+  // TODO Continue a faire la liste des materials et services
+  @GetMapping("material")
+  @PreAuthorize("hasAnyRole('MEMBER', 'MODERATOR', 'ADMIN')")
+  public ResponseEntity<CollectionModel<CategoryDTO>> listCategoriesMaterials() {
+    List<CategoryDTO> listCategoriesForMaterial = categoryService.listCategoriesForMaterial();
+    return ResponseEntity.ok().body(CollectionModel.of(listCategoriesForMaterial));
+  }
 }

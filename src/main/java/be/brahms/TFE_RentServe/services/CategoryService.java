@@ -58,4 +58,11 @@ public interface CategoryService {
    * @param id the identifier of category
    */
   void deleteCategory(long id);
+
+  /**
+   * List of all categories for only material
+   *
+   * @return list of categories only for material
+   */
+  List<CategoryDTO> listCategoriesForMaterial();
 }
